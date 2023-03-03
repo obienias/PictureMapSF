@@ -1,0 +1,28 @@
+{'photo': 
+{'id': '52678291710', '
+secret': 'f2d5bf7b8a', 
+'server': '65535', 
+'farm': 66, '
+dateuploaded': '1675917736', 
+'isfavorite': 0, 
+'license': '0', 'safety_level': '0', 'rotation': 0, 'originalsecret': '3c67235734', 'originalformat': 'jpg', 
+'owner': {'nsid': '19159227@N06', 'username': 'Stan-the-Rocker', 'realname': '', 'location': None, 'iconserver': '65535', 'iconfarm': 66, 'path_alias': None, 
+'gift': {'gift_eligible': True, 'eligible_durations': ['year', 'month', 'week'], 'new_flow': True}}, 
+'title': {'_content': 'Embarcadero - 020823 - 52 - Ferry Building - Hearts in SF'}, 
+'description': {'_content': '                               '}, 
+'visibility': {'ispublic': 1, 'isfriend': 0, 'isfamily': 0}, 
+'dates': {'posted': '1675917736', 'taken': '2023-02-08 14:54:24', 'takengranularity': 0, 'takenunknown': '0', 'lastupdate': '1675985740'}, 
+'views': '17', 'editability': {'cancomment': 0, 'canaddmeta': 0}, 
+'publiceditability': {'cancomment': 1, 'canaddmeta': 0}, 
+'usage': {'candownload': 1, 'canblog': 0, 'canprint': 0, 'canshare': 1}, 
+'comments': {'_content': '0'}, 'notes': {'note': []}, 
+'people': {'haspeople': 0}, 
+'tags': {'tag': [{'id': '19113905-52678291710-46', 'author': '19159227@N06', 'authorname': 'Stan-the-Rocker', 'raw': 'San Francisco', '_content': 'sanfrancisco', 'machine_tag': 0}, 
+{'id': '19113905-52678291710-16468', 'author': '19159227@N06', 'authorname': 'Stan-the-Rocker', 'raw': 'Embarcadero', '_content': 'embarcadero', 'machine_tag': 0}, 
+{'id': '19113905-52678291710-18974', 'author': '19159227@N06', 'authorname': 'Stan-the-Rocker', 'raw': 'Ferry Building', '_content': 'ferrybuilding', 'machine_tag': 0}, 
+{'id': '19113905-52678291710-85', 'author': '19159227@N06', 'authorname': 'Stan-the-Rocker', 'raw': 'Street', '_content': 'street', 'machine_tag': 0}, 
+{'id': '19113905-52678291710-363715194', 'author': '19159227@N06', 'authorname': 'Stan-the-Rocker', 'raw': 'SEL18135', '_content': 'sel18135', 'machine_tag': 0}]}, 
+'location': {'latitude': '37.795686', 'longitude': '-122.393192', 'accuracy': '16', 'context': '0', 'locality': {'_content': 'Embarcadero'}, 
+'county': {'_content': 'San Francisco County'}, 'region': {'_content': 'California'}, 'country': {'_content': 'United States'}, 
+'neighbourhood': {'_content': ''}}, 'geoperms': {'ispublic': 1, 'iscontact': 0, 'isfriend': 0, 'isfamily': 0}, 
+'urls': {'url': [{'type': 'photopage', '_content': 'https://www.flickr.com/photos/19159227@N06/52678291710/'}]}, 'media': 'photo'}, 'stat': 'ok'}
