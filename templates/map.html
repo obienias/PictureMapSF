@@ -7,7 +7,25 @@
 
 {% block body %}
 
+<nav>
+  <section>
+    <label for="time_start_dropdown">Choose the starting hour:</label>
+    <select name="time-start" id="time_start_dropdown">
+      <option value="">Select an hour</option>
+    </select>
+  </section>
+  <section>
+    <label for="time_end_dropdown">Choose the ending hour:</label>
+    <select name="time-start" id="time_end_dropdown">
+      <option value="">Select an hour</option>
+    </select>
+  </section>
+</nav>
+
   <section class="map">
+    <br>
+    <br>
+    <br>
     <div id="map"></div>
   </section>
 
