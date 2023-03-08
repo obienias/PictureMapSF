@@ -14,7 +14,7 @@ model.connect_to_db(server.app)
 model.db.create_all()
 
 # Load photo data from JSON file
-with open("data/photos.json") as f:
+with open("data/photos_all2.json") as f:
     photo_data = json.loads(f.read())
 
 # Create photos, store them in list so we can use them
