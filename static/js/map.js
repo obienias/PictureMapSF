@@ -1,4 +1,5 @@
 'use strict';
+// import { MarkerClusterer } from "@googlemaps/markerclusterer";
 
 //function to generate dropdown menu for each hour
 function generateDropdownHour(elemnent_id) {
@@ -31,14 +32,11 @@ function get_photo_by_hour (start, end, photos_info) {
   return filtered_photos
 }
 
-
-
 function initMap() {
   const sfCoords = {
     lat: 37.773972,
     lng: -122.431297,
   };
-
 
   fetch('/api/markers')
     .then((response) => response.json())
@@ -95,6 +93,9 @@ function initMap() {
           })
           all_markers.push(photoMarker);
         }
+        let MarkerClusters = new MarkerClusterer(map, all_markers, {
+          imagePath: 'https://developers.google.com/maps/documentation/javascript/examples/markerclusterer/m'
+        });
       }
 
       displayMarkers();
@@ -102,6 +103,7 @@ function initMap() {
     const map = new google.maps.Map(document.querySelector('#map'), {
           center: sfCoords,
           zoom: 12,
+          
         });
 }
 
