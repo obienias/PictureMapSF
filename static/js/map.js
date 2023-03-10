@@ -1,5 +1,7 @@
 'use strict';
-// import { MarkerClusterer } from "@googlemaps/markerclusterer";
+
+// import { MAPSTYLES } from 'mapStyles.js';
+
 
 //function to generate dropdown menu for each hour
 function generateDropdownHour(elemnent_id) {
@@ -99,11 +101,13 @@ function initMap() {
       }
 
       displayMarkers();
-    })
+    });
+
     const map = new google.maps.Map(document.querySelector('#map'), {
           center: sfCoords,
           zoom: 12,
-          
+          styles: MAPSTYLES,
         });
+
 }
 
