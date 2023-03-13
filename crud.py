@@ -1,6 +1,6 @@
 """ CRUD Operations"""
 
-from model import db, Photo, connect_to_db
+from model import db, Photo, Neighbourhood, connect_to_db
 
 
 def create_photo(photo_id, title, latitude, longitude, time_taken, hour_taken, photo_url, author_id, author_name):
@@ -23,6 +23,18 @@ def get_photos():
 
     return Photo.query.all()
 
+def create_neighbourhoods(id, name, coordinates, url):
+    neighbourhood = Neighbourhood(
+        id = id, 
+        name = name, 
+        coordinates = coordinates, 
+        url = url
+    )
+
+def get_neighbourhoods():
+    """Return all neighbourhoods"""
+
+    return Neighbourhood.query.all()
 
 if __name__ == "main":
     from server import app

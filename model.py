@@ -24,6 +24,18 @@ class Photo(db.Model):
     def __repr__(self):
         return f"<photo_id = {self.photo_id} and title = {self.title}>"
 
+class Neighbourhood(db.Model):
+
+    __tablename__ = "neighbourhoods"
+
+    id = db.Column(db.Integer, primary_key=True, autoincrement=True)
+    name = db.Column(db.String)
+    coordinates = db.Column(db.String)
+    url = db.Column(db.String)
+
+    def __repr__(self):
+        return f"<neighbourhood_name = {self.name}>"
+
 def connect_to_db(flask_app, db_uri="postgresql:///photos", echo=True):
     flask_app.config["SQLALCHEMY_DATABASE_URI"] = db_uri
     flask_app.config["SQLALCHEMY_ECHO"] = echo  #false

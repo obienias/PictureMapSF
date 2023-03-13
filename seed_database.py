@@ -37,6 +37,20 @@ for photo in photo_data:
     time_taken=time_taken, hour_taken=hour_taken, photo_url=photo_url, author_id=author_id, author_name=author_name)
     photos_in_db.append(new_photo)
 
+with open("data/SF Find Neighborhoods.geojson") as f:
+    neighbourhoods_data = json.loads(f.read())
+
+neighbourhoods_in_db = []
+for neighbourhood in neighbourhoods_data:
+    id, name, coordinates, url= (
+        neighbourhood["id"],
+        neighbourhood["name"],
+        neighbourhood["coordinates"],                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    
+        neighbourhood["url"],
+        
+    )
+
+model.db.session.add_all(photos_in_db)
 model.db.session.add_all(photos_in_db)
 model.db.session.commit()
 

@@ -2,7 +2,7 @@
 
 from flask import (Flask, render_template, request, flash, session,
                     redirect, jsonify)
-from model import connect_to_db, db, Photo
+from model import connect_to_db, db, Photo, Neighbourhood
 import crud
 from jinja2 import StrictUndefined
 
