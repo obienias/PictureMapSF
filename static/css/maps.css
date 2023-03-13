@@ -9,3 +9,28 @@ html, body {
   width: 90%;
   height: 90%;
 }
+
+
+div.window-content {
+  overflow: hidden;
+  display: flex;
+  max-width: 300px;
+}
+
+.photo-thumbnail {
+  flex: 1 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.photo-thumbnail img {
+  width: 100%;
+}
+
+.window-content ul {
+  flex: 1 0;
+  list-style: none;
+  padding: 0;
+  margin: 1em 0 1em 1em;
+}

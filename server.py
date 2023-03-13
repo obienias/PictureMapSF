@@ -35,8 +35,10 @@ def locations_info():
             "title": photo.title,
             "latitude": photo.latitude,
             "longitude": photo.longitude,
-            "hour_taken" : photo.hour_taken
-
+            "hour_taken" : photo.hour_taken,
+            "photo_url": photo.photo_url,
+            "author_name": photo.author_name,
+            "time_taken": photo.time_taken
         })
 
     return jsonify(photos_info)
