@@ -79,6 +79,8 @@ function initMap() {
       // Print the new coordinates
       console.log(new_coords);
 
+
+      //create sample polygon
       const outerRichmond = new google.maps.Polygon({
           paths: new_coords,
           strokeColor: "#FF0000",
@@ -88,7 +90,7 @@ function initMap() {
           fillOpacity: 0.35,
         });
 
-        outerRichmond.setMap(mapPhoto);
+      outerRichmond.setMap(mapPhoto);
 
       let all_markers = [];
 
@@ -98,27 +100,21 @@ function initMap() {
           marker.setMap(null)
         }
         all_markers = [];
-        // try{
-        //   if (MarkerClusters) {
-        //     MarkerClusters.clearMarkers();
-        //   }
-        // }catch (error) {
-        //   console.error(error);
-        //   // Expected output: ReferenceError: nonExistentFunction is not defined
-        //   // (Note: the exact output may be browser-dependent)
-        // }
+
       };
 
-      // function deleteClusters() {
-      //   // MarkerClusters.setMap(null)
-      //   markerClusterer.clearMarkers();
-      // };
+      let MarkerClusters = null;
 
       function displayMarkers() {
         deleteMarkers();
-        // deleteClusters();
+
+        // check if MarkerClusters variable exist already 
+        if (MarkerClusters) {
+          MarkerClusters.clearMarkers();
+        }
         // let MarkerClusters = new MarkerClusterer(map, all_markers)
-        // MarkerClusters.clearMarkers();
+
+        //loops over filtered_photos and create markers, information for info-window 
         const filtered_photos = get_photo_by_hour(start_hour, finish_hour, photos_info);
         console.log(filtered_photos);
         for (const photo of filtered_photos) {
@@ -140,16 +136,6 @@ function initMap() {
             </ul>
           </div>`
 
-          //too slow rendering for svg markers... shoud use png or jpg
-          // const svgMarker = {
-          //   path: "M-1.547 12l6.563-6.609-1.406-1.406-5.156 5.203-2.063-2.109-1.406 1.406zM0 0q2.906 0 4.945 2.039t2.039 4.945q0 1.453-0.727 3.328t-1.758 3.516-2.039 3.070-1.711 2.273l-0.75 0.797q-0.281-0.328-0.75-0.867t-1.688-2.156-2.133-3.141-1.664-3.445-0.75-3.375q0-2.906 2.039-4.945t4.945-2.039z",
-          //   fillColor: "blue",
-          //   fillOpacity: 0.6,
-          //   strokeWeight: 0,
-          //   rotation: 0,
-          //   scale: 1,
-          //   anchor: new google.maps.Point(0, 20),
-          // };
 
           const photoMarker = new google.maps.Marker({
             position: {
@@ -177,6 +163,8 @@ function initMap() {
 
           
         }
+
+        //creates clusters for markers
         let MarkerClusters = new MarkerClusterer(mapPhoto, all_markers, {
           imagePath: 'https://developers.google.com/maps/documentation/javascript/examples/markerclusterer/m',
           // palette: d3.interpolateRgb('red', 'blue'),
@@ -235,47 +223,15 @@ function initMap() {
         //     zIndex: 1000 + count,
         //   });
         // }
-      //     renderer: function ({ count, position }, stats) {
-      //       // use d3-interpolateRgb to interpolate between red and blue
-      //       const color = this.palette(count / stats.clusters.markers.max);
-      //       // create svg url with fill color
-      //       const svg = window.btoa(`
-      // <svg fill="${color}" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 240 240">
-      //   <circle cx="120" cy="120" opacity=".8" r="70" />    
-      // </svg>`);
-      //       // create marker using svg icon
-      //       return new google.maps.Marker({
-      //           position,
-      //           icon: {
-      //               url: `data:image/svg+xml;base64,${svg}`,
-      //               scaledSize: new google.maps.Size(75, 75),
-      //           },
-      //           label: {
-      //               text: String(count),
-      //               color: "rgba(255,255,255,0.9)",
-      //               fontSize: "12px",
-      //           },
-      //           // adjust zIndex to be above other markers
-      //           zIndex: Number(google.maps.Marker.MAX_ZINDEX) + count,
-      //       });
+      
       //   }
         });
-      }
+
+        console.log(MarkerClusters)
+        }
 
         displayMarkers();
 
-        
-
-        // const outerRichmond = new google.maps.Polygon({
-        //   paths: new_coords,
-        //   strokeColor: "#FF0000",
-        //   strokeOpacity: 0.8,
-        //   strokeWeight: 3,
-        //   fillColor: "#FF0000",
-        //   fillOpacity: 0.35,
-        // });
-
-        // outerRichmond.setMap(map);
       
     });
 
