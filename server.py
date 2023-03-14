@@ -43,6 +43,23 @@ def locations_info():
 
     return jsonify(photos_info)
 
+@app.route("/api/neighbourhoods")
+def neighbourhoods_info():
+    """JSON information about neighbourhoods."""
+
+    neighbourhoods_info = []
+    neighbourhoods_all = crud.get_neighbourhoods()
+    for neighbourhood in neighbourhoods_all:
+        neighbourhoods_info.append({
+            "id": neighbourhood.id,
+            "name": neighbourhood.name,
+            "coordinates": neighbourhood.coordinates,
+            "url": neighbourhood.url,
+
+        })
+
+    return jsonify(neighbourhoods_info)
+
 
 if __name__ == "__main__":
 

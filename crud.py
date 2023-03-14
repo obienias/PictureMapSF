@@ -23,13 +23,14 @@ def get_photos():
 
     return Photo.query.all()
 
-def create_neighbourhoods(id, name, coordinates, url):
+def create_neighbourhoods(name, coordinates, url):
     neighbourhood = Neighbourhood(
-        id = id, 
         name = name, 
         coordinates = coordinates, 
         url = url
     )
+
+    return neighbourhood
 
 def get_neighbourhoods():
     """Return all neighbourhoods"""

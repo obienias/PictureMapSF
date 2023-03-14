@@ -5,6 +5,7 @@ let all_markers = [];
 let MarkerClusters = null;
 let mapPhoto; 
 let photoInfo;
+let neighbourhoods_info;
 
 
 //function to generate dropdown menu for each hour
@@ -66,17 +67,18 @@ function deleteMarkers() {
 };
 
 function displayMarkers() {
+
+  //clears the markers
   deleteMarkers();
 
-  // check if MarkerClusters variable exist already 
+  //clears the merker clusters
   if (MarkerClusters) {
     MarkerClusters.clearMarkers();
   }
-  // let MarkerClusters = new MarkerClusterer(map, all_markers)
 
   //loops over filtered_photos and create markers, information for info-window 
   const filtered_photos = get_photo_by_hour(start_hour, finish_hour, photos_info);
-  console.log(filtered_photos);
+  // console.log(filtered_photos);
   for (const photo of filtered_photos) {
 
     // Define the content of the infoWindow
@@ -103,7 +105,6 @@ function displayMarkers() {
         lng: photo.longitude,
       },
       title: `Photo title: ${photo.title}`,
-      // icon: svgMarker,
       // icon: {
       //   url: '/static/img/marker.svg',
       //   scaledSize: {
@@ -190,6 +191,23 @@ function displayMarkers() {
   console.log(MarkerClusters)
 }
 
+function displayNeighbourhoods() {
+  for (let neighbourhood of neighbourhoods_info) {
+    console.log(neighbourhood)
+    // let coords =  JSON.parse(neighbourhood["coordinates"]);
+    // console.log(coords)
+    const name = neighbourhood.name;
+    // const newPolygon = new google.maps.Polygon({
+    //       paths: coords,
+    //       strokeColor: "#FF0000",
+    //       strokeOpacity: 0.8,
+    //       strokeWeight: 1,
+    //       fillColor: "#FF0000",
+    //       fillOpacity: 0.35,
+    //     });
+  }
+}
+
 function initMap() {
   const sfCoords = {
     lat: 37.773972,
@@ -204,37 +222,67 @@ function initMap() {
 
       photoInfo = new google.maps.InfoWindow();
 
-      //polygon 
-      let coords = [[[[-122.51316127599989,37.77500805900007],[-122.50267096999994,37.77547056700007],[-122.50308645199993,37.781176767000034],[-122.5030991939999,37.78129374400004],[-122.49332613999991,37.781742992000034],[-122.49349051899992,37.783498371000064],[-122.48715071499993,37.783785427000055],[-122.47857883799992,37.78417398600004],[-122.4777669469999,37.77286365500004],[-122.48419420099992,37.77256906100007],[-122.4895394799999,37.772325472000034],[-122.49597201599994,37.77203201400005],[-122.5034726909999,37.771689379000065],[-122.50775066499995,37.771495033000065],[-122.51105375499992,37.77134249900007],[-122.51314054099993,37.771331115000066],[-122.51316127599989,37.77500805900007]]]];
+      // //polygon 
+      // let coords = [[[[-122.51316127599989,37.77500805900007],[-122.50267096999994,37.77547056700007],[-122.50308645199993,37.781176767000034],[-122.5030991939999,37.78129374400004],[-122.49332613999991,37.781742992000034],[-122.49349051899992,37.783498371000064],[-122.48715071499993,37.783785427000055],[-122.47857883799992,37.78417398600004],[-122.4777669469999,37.77286365500004],[-122.48419420099992,37.77256906100007],[-122.4895394799999,37.772325472000034],[-122.49597201599994,37.77203201400005],[-122.5034726909999,37.771689379000065],[-122.50775066499995,37.771495033000065],[-122.51105375499992,37.77134249900007],[-122.51314054099993,37.771331115000066],[-122.51316127599989,37.77500805900007]]]];
 
-      // Flatten the nested list
-      let flat_coords = coords.flat(2);
+      // // Flatten the nested list
+      // let flat_coords = coords.flat(2);
 
-      // Convert to desired format
-      let new_coords = flat_coords.map(coord => {
-          let lat = coord[1];
-          let lng = coord[0];
-          return {"lat": lat, "lng": lng};
-      });
-
-      // Print the new coordinates
-      console.log(new_coords);
-
-
-      //create sample polygon
-      const outerRichmond = new google.maps.Polygon({
-          paths: new_coords,
-          strokeColor: "#FF0000",
-          strokeOpacity: 0.8,
-          strokeWeight: 3,
-          fillColor: "#FF0000",
-          fillOpacity: 0.35,
-        });
-
-      outerRichmond.setMap(mapPhoto);
+      // // Convert to desired format
+      // let new_coords = flat_coords.map(coord => {
+      //     let lat = coord[1];
+      //     let lng = coord[0];
+      //     return {"lat": lat, "lng": lng};
+      // });
      
       displayMarkers();
-      
+
+      fetch('/api/neighbourhoods')
+        .then((response) => response.json())
+        .then((responseData) => {
+
+          neighbourhoods_info = responseData;
+          console.log(neighbourhoods_info)
+
+          for (const item of neighbourhoods_info) {
+            let coords =  JSON.parse(item.coordinates);
+            const newPolygon = new google.maps.Polygon({
+              paths: coords,
+              strokeColor: "#FF0000",
+              strokeOpacity: 0.8,
+              strokeWeight: 1,
+              fillColor: "#FF0000",
+              fillOpacity: 0.35,
+            });
+
+            newPolygon.setMap(mapPhoto);
+
+            console.log(item.name)
+          }
+          // let coord_test = JSON.parse(neighbourhoods_info[0]["coordinates"])
+          // console.log(coord_test)
+
+          // for (let item of neighbourhoods_info) {
+          //   // let itemN = JSON.parse(item)
+          //   console.log(item.name);
+          //   // let coords =  JSON.parse(item["coordinates"]);
+          //   // console.log(coords)
+          //   // const name = neighbourhood.name;
+          //   // const newPolygon = new google.maps.Polygon({
+          //   //       paths: coords,
+          //   //       strokeColor: "#FF0000",
+          //   //       strokeOpacity: 0.8,
+          //   //       strokeWeight: 1,
+          //   //       fillColor: "#FF0000",
+          //   //       fillOpacity: 0.35,
+          //   //     });
+          // }
+
+          // displayNeighbourhoods()        
+
+        });
+     
+
     });
 
   mapPhoto = new google.maps.Map(document.querySelector('#map'), {

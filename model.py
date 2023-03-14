@@ -2,6 +2,7 @@
 
 from flask_sqlalchemy import SQLAlchemy
 from datetime import datetime
+import json
 
 db = SQLAlchemy()
 
@@ -30,7 +31,7 @@ class Neighbourhood(db.Model):
 
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
     name = db.Column(db.String)
-    coordinates = db.Column(db.String)
+    coordinates = db.Column(db.JSON)
     url = db.Column(db.String)
 
     def __repr__(self):
