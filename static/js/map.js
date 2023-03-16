@@ -1,11 +1,20 @@
 'use strict';
 
+
 let photos_info;
 let all_markers = [];
 let MarkerClusters = null;
 let mapPhoto; 
 let photoInfo;
 let neighbourhoods_info;
+let polygonList = []
+let photosByNeighbourhood = []
+let filtered_photos
+let neighbourhoodInfo
+const sfCoords = {
+  lat: 37.773972,
+  lng: -122.431297,
+};
 
 
 //function to generate dropdown menu for each hour
@@ -77,7 +86,7 @@ function displayMarkers() {
   }
 
   //loops over filtered_photos and create markers, information for info-window 
-  const filtered_photos = get_photo_by_hour(start_hour, finish_hour, photos_info);
+  filtered_photos = get_photo_by_hour(start_hour, finish_hour, photos_info);
   // console.log(filtered_photos);
   for (const photo of filtered_photos) {
 
@@ -125,94 +134,114 @@ function displayMarkers() {
     
   }
 
-  //creates clusters for markers
-  MarkerClusters = new MarkerClusterer(mapPhoto, all_markers, {
-    imagePath: 'https://developers.google.com/maps/documentation/javascript/examples/markerclusterer/m',
-    // palette: d3.interpolateRgb('red', 'blue'),
-    maxZoom: 15,
-    // styles: [
-    //   {
-    //     textColor: 'white',
-    //     url: '/static/img/m1.png',
-    //     height: 50,
-    //     width: 50,
-    //     // scaledSize: {
-    //     //   width: 75,
-    //     //   height: 75,}
-    //     },
-    //  {
-    //     textColor: 'white',
-    //     url: '/static/img/m1.png',
-    //     height: 50,
-    //     width: 50
-    //   },
-    //  {
-    //     textColor: 'white',
-    //     url: '/static/img/m1.png',
-    //     height: 50,
-    //     width: 50
-    //   }
-    // ]
-  //   renderer: function ({ count, position }, stats) {const color =
-  //     count > Math.max(10, stats.clusters.markers.mean)
-  //       ? "#ff0000"
-  //       : "#0000ff";
-    
+  let renderer = {
+    render: function ({ count, position }, stats) {
+          // use d3-interpolateRgb to interpolate between red and blue
+          const color = this.palette(count / stats.clusters.markers.max);
+          // // create svg url with fill color
+          const svg = window.btoa(`
+            <svg fill="${color}" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 240 240">
+              <circle cx="120" cy="120" opacity=".8" r="70" />    
+            </svg>`);
+          // create marker using svg icon
+          return new google.maps.Marker({
+              position,
+              icon: {
+                url: `data:image/svg+xml;base64,${svg}`,
+                scaledSize: new google.maps.Size(75, 75),
+            },
+              label: {
+                  text: String(count),
+                  color: "rgba(255,255,255,0.9)",
+                  fontSize: "12px",
+              },
+              // adjust zIndex to be above other markers
+              zIndex: Number(google.maps.Marker.MAX_ZINDEX) + count,
+          });
+      }};
 
-  //   // create svg url with fill color
-  //   const svg = window.btoa(`
-  //   <svg fill="${color}" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 240 240">
-  //     <circle cx="120" cy="120" opacity=".6" r="70" />
-  //     <circle cx="120" cy="120" opacity=".3" r="90" />
-  //     <circle cx="120" cy="120" opacity=".2" r="110" />
-  //     <circle cx="120" cy="120" opacity=".1" r="130" />
-  //   </svg>`);
-    
-  //   // create marker using svg icon
-  //   return new google.maps.Marker({
-  //     position,
-  //     icon: {
-  //       url: `data:image/svg+xml;base64,${svg}`,
-  //       scaledSize: new google.maps.Size(45, 45),
-  //     },
-  //     label: {
-  //       text: String(count),
-  //       color: "rgba(255,255,255,0.9)",
-  //       fontSize: "12px",
-  //     },
-  //     // adjust zIndex to be above other markers
-  //     zIndex: 1000 + count,
-  //   });
+MarkerClusters = new MarkerClusterer(mapPhoto, all_markers, renderer);
+
+  //creates clusters for markers
+  // MarkerClusters = new MarkerClusterer(mapPhoto, all_markers, {
+  //   // imagePath: 'https://developers.google.com/maps/documentation/javascript/examples/markerclusterer/m',
+  //   // imagePath: 'static/img/m',
+  //   palette: d3.interpolateRgb('red', 'blue'),
+  //   maxZoom: 15,
+  //   // styles: [
+  //   //   {
+  //   //     textColor: 'white',
+  //   //     url: '/static/img/m1.png',
+  //   //     height: 50,
+  //   //     width: 50,
+  //   //     // scaledSize: {
+  //   //     //   width: 75,
+  //   //     //   height: 75,}
+  //   //     },
+  //   //  {
+  //   //     textColor: 'white',
+  //   //     url: '/static/img/m1.png',
+  //   //     height: 50,
+  //   //     width: 50
+  //   //   },
+  //   //  {
+  //   //     textColor: 'white',
+  //   //     url: '/static/img/m1.png',
+  //   //     height: 50,
+  //   //     width: 50
+  //   //   }
+  //   // ]
+  //   render: function ({ count, position }, stats) {
+  //     // use d3-interpolateRgb to interpolate between red and blue
+  //     const color = this.palette(count / stats.clusters.markers.max);
+  //     // // create svg url with fill color
+  //     const svg = window.btoa(`
+  //       <svg fill="${color}" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 240 240">
+  //         <circle cx="120" cy="120" opacity=".8" r="70" />    
+  //       </svg>`);
+  //     // create marker using svg icon
+  //     return new google.maps.Marker({
+  //         position,
+  //         icon: {
+  //           scaledSize: google.maps.scaledSize(150, 150),
+  //         },
+  //         label: {
+  //             text: String(count),
+  //             color: "rgba(255,255,255,0.9)",
+  //             fontSize: "12px",
+  //         },
+  //         // adjust zIndex to be above other markers
+  //         zIndex: Number(google.maps.Marker.MAX_ZINDEX) + count,
+  //     });
   // }
 
 //   }
-  });
+  // });
 
   console.log(MarkerClusters)
 }
 
-function displayNeighbourhoods() {
-  for (let neighbourhood of neighbourhoods_info) {
-    console.log(neighbourhood)
-    // let coords =  JSON.parse(neighbourhood["coordinates"]);
-    // console.log(coords)
-    const name = neighbourhood.name;
-    // const newPolygon = new google.maps.Polygon({
-    //       paths: coords,
-    //       strokeColor: "#FF0000",
-    //       strokeOpacity: 0.8,
-    //       strokeWeight: 1,
-    //       fillColor: "#FF0000",
-    //       fillOpacity: 0.35,
-    //     });
-  }
-}
+
+
+// function displayNeighbourhoods() {
+//   for (let neighbourhood of neighbourhoods_info) {
+//     console.log(neighbourhood)
+//     // let coords =  JSON.parse(neighbourhood["coordinates"]);
+//     // console.log(coords)
+//     const name = neighbourhood.name;
+//     // const newPolygon = new google.maps.Polygon({
+//     //       paths: coords,
+//     //       strokeColor: "#FF0000",
+//     //       strokeOpacity: 0.8,
+//     //       strokeWeight: 1,
+//     //       fillColor: "#FF0000",
+//     //       fillOpacity: 0.35,
+//     //     });
+//   }
+// }
 
 function initMap() {
-  const sfCoords = {
-    lat: 37.773972,
-    lng: -122.431297,
-  };
+  
 
   fetch('/api/markers')
     .then((response) => response.json())
@@ -237,50 +266,127 @@ function initMap() {
      
       displayMarkers();
 
-      fetch('/api/neighbourhoods')
-        .then((response) => response.json())
-        .then((responseData) => {
+      // fetch('/api/neighbourhoods')
+      //   .then((response) => response.json())
+      //   .then((responseData2) => {
 
-          neighbourhoods_info = responseData;
-          console.log(neighbourhoods_info)
+      //     neighbourhoods_info = responseData2;
+      //     console.log(neighbourhoods_info);
 
-          for (const item of neighbourhoods_info) {
-            let coords =  JSON.parse(item.coordinates);
-            const newPolygon = new google.maps.Polygon({
-              paths: coords,
-              strokeColor: "#FF0000",
-              strokeOpacity: 0.8,
-              strokeWeight: 1,
-              fillColor: "#FF0000",
-              fillOpacity: 0.35,
-            });
+      //     neighbourhoodInfo = new google.maps.InfoWindow();
 
-            newPolygon.setMap(mapPhoto);
 
-            console.log(item.name)
-          }
-          // let coord_test = JSON.parse(neighbourhoods_info[0]["coordinates"])
-          // console.log(coord_test)
+      //     google.maps.Polygon.prototype.getBoundingBox = function() {
+      //       var bounds = new google.maps.LatLngBounds();
+          
+      //       this.getPath().forEach(function(element,index) {
+      //         bounds.extend(element)
+      //       });
+      //       return(bounds);
+      //     };
 
-          // for (let item of neighbourhoods_info) {
-          //   // let itemN = JSON.parse(item)
-          //   console.log(item.name);
-          //   // let coords =  JSON.parse(item["coordinates"]);
-          //   // console.log(coords)
-          //   // const name = neighbourhood.name;
-          //   // const newPolygon = new google.maps.Polygon({
-          //   //       paths: coords,
-          //   //       strokeColor: "#FF0000",
-          //   //       strokeOpacity: 0.8,
-          //   //       strokeWeight: 1,
-          //   //       fillColor: "#FF0000",
-          //   //       fillOpacity: 0.35,
-          //   //     });
-          // }
 
-          // displayNeighbourhoods()        
+      //     for (const item of neighbourhoods_info) {
+      //       let coords =  JSON.parse(item.coordinates);
+      //       const newPolygon = new google.maps.Polygon({
+      //         title: item.name,
+      //         paths: coords,
+      //         strokeColor: "#FF0000",
+      //         strokeOpacity: 0.8,
+      //         strokeWeight: 1,
+      //         fillColor: "#FF0000",
+      //         fillOpacity: 0.35,
+      //       });
 
-        });
+      //       newPolygon.setMap(mapPhoto);
+      //       polygonList.push(newPolygon);
+
+      //       const neighbourhoodInfoContent = `
+      //         <div class="window-content">
+
+      //           <ul class="photo-info">
+      //             <li><b>Naighbourhood name: </b>${item.name}</li>
+      //             <li><b>Link: </b>${item.url}</li>
+      //           </ul>
+      //         </div>`
+      //       // console.log(item.name);
+
+      //       // let PolyCenter = newPolygon.getBoundingBox().getCenter();
+
+      //       // newPolygon.addListener('click', () => {
+      //       //   neighbourhoodInfo.close();
+      //       //   neighbourhoodInfo.setContent(neighbourhoodInfoContent);
+      //       //   neighbourhoodInfo.open(mapPhoto, { lat: 37.773972, lng: -122.4194});
+      //       //   // mapPhoto.setCenter(37.773972,-122.4194)
+      //       // });
+      //     }
+
+      //     // console.log(polygonList);
+
+      //     let testPolygon = polygonList[2];
+      //     testPolygon.setMap(mapPhoto);
+
+      //     let PolyCenter = testPolygon.getBoundingBox().getCenter();
+
+      //     const centerMarker = new google.maps.Marker({
+      //       position: PolyCenter,
+      //       title: 'test center',
+      //       // icon: {
+      //       //   url: '/static/img/marker.svg',
+      //       //   scaledSize: {
+      //       //     width: 15,
+      //       //     height: 15,
+      //       //   }
+      //       // },
+      //       map: mapPhoto,
+      //     })
+
+      //     const contentString =
+      //         '<div id="content">' +
+      //         '<div id="siteNotice">' +
+      //         "</div>" +
+      //         '<h1 id="firstHeading" class="firstHeading">Uluru</h1>' +
+      //         '<div id="bodyContent">' +
+      //         "<p><b>Uluru</b>, also referred to as <b>Ayers Rock</b>, is a large " +
+      //         "sandstone rock formation in the southern part of the " +
+      //         "Northern Territory, central Australia. It lies 335&#160;km (208&#160;mi) " +
+      //         "Heritage Site.</p>" +
+      //         '<p>Attribution: Uluru, <a href="https://en.wikipedia.org/w/index.php?title=Uluru&oldid=297882194">' +
+      //         "https://en.wikipedia.org/w/index.php?title=Uluru</a> " +
+      //         "(last visited June 22, 2009).</p>" +
+      //         "</div>" +
+      //         "</div>"
+
+      //     console.log (testPolygon.getBoundingBox().getCenter());
+
+      //     google.maps.event.addListener(testPolygon, 'click', () => {
+      //       // alert ("clicked!");
+      //       neighbourhoodInfo.setContent(contentString);
+      //       neighbourhoodInfo.open(mapPhoto, centerMarker);
+      //       // mapPhoto.setCenter(37.773972,-122.4194)
+      //     });
+
+
+
+      //     // for (const photo of filtered_photos) {
+
+      //     //   let photoLocation = {
+      //     //     lat: photo.latitude,
+      //     //     lng: photo.longitude,
+      //     //   }
+
+      //     //   if (google.maps.geometry.poly.containsLocation(photoLocation, polygonList[2])) {
+      //     //     photosByNeighbourhood.push(photo)
+
+      //     //   }
+
+      //     // }   
+          
+      //     // console.log(photosByNeighbourhood)
+
+      //      // displayNeighbourhoods()        
+
+      //   });
      
 
     });
