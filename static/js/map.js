@@ -15,6 +15,8 @@ const sfCoords = {
   lat: 37.773972,
   lng: -122.431297,
 };
+let countTotal;
+let count;
 
 
 //function to generate dropdown menu for each hour
@@ -114,13 +116,13 @@ function displayMarkers() {
         lng: photo.longitude,
       },
       title: `Photo title: ${photo.title}`,
-      // icon: {
-      //   url: '/static/img/marker.svg',
-      //   scaledSize: {
-      //     width: 15,
-      //     height: 15,
-      //   }
-      // },
+      icon: {
+        url: '/static/img/marker.png',
+        scaledSize: {
+          width: 15,
+          height: 15,
+        }
+      },
       map: mapPhoto,
     })
     all_markers.push(photoMarker);
@@ -134,33 +136,76 @@ function displayMarkers() {
     
   }
 
-  let renderer = {
-    render: function ({ count, position }, stats) {
-          // use d3-interpolateRgb to interpolate between red and blue
-          const color = this.palette(count / stats.clusters.markers.max);
-          // // create svg url with fill color
-          const svg = window.btoa(`
-            <svg fill="${color}" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 240 240">
-              <circle cx="120" cy="120" opacity=".8" r="70" />    
-            </svg>`);
-          // create marker using svg icon
-          return new google.maps.Marker({
-              position,
-              icon: {
-                url: `data:image/svg+xml;base64,${svg}`,
-                scaledSize: new google.maps.Size(75, 75),
-            },
-              label: {
-                  text: String(count),
-                  color: "rgba(255,255,255,0.9)",
-                  fontSize: "12px",
-              },
-              // adjust zIndex to be above other markers
-              zIndex: Number(google.maps.Marker.MAX_ZINDEX) + count,
-          });
-      }};
+//   let renderer = {
+//     render: function ({ count, position }, stats) {
+//           // use d3-interpolateRgb to interpolate between red and blue
+//           const color = this.palette(count / stats.clusters.markers.max);
+//           // // create svg url with fill color
+//           const svg = window.btoa(`
+//             <svg fill="${color}" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 240 240">
+//               <circle cx="120" cy="120" opacity=".8" r="70" />    
+//             </svg>`);
+//           // create marker using svg icon
+//           return new google.maps.Marker({
+//               position,
+//               icon: {
+//                 url: `data:image/svg+xml;base64,${svg}`,
+//                 scaledSize: new google.maps.Size(75, 75),
+//             },
+//               label: {
+//                   text: String(count),
+//                   color: "rgba(255,255,255,0.9)",
+//                   fontSize: "12px",
+//               },
+//               // adjust zIndex to be above other markers
+//               zIndex: Number(google.maps.Marker.MAX_ZINDEX) + count,
+//           });
+//       }};
 
-MarkerClusters = new MarkerClusterer(mapPhoto, all_markers, renderer);
+// MarkerClusters = new MarkerClusterer(mapPhoto, all_markers, renderer);
+
+    countTotal = all_markers.length
+    const maxDim= 200;
+    const minDim = 30;
+    const k = 5;
+    const x = 0.35;
+
+    let dimension = (maxDim - minDim) / (1 + Math.exp(-k*(count/countTotal - x))) + minDim;
+
+    const svg = window.btoa(`
+    <svg fill="#edba31" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 240 240">
+    <circle cx="120" cy="120" opacity="1" r="70" />
+    <circle cx="120" cy="120" opacity=".7" r="90" />
+    <circle cx="120" cy="120" opacity=".3" r="110" />
+    <circle cx="120" cy="120" opacity=".2" r="130" />
+    </svg>`);
+
+    const renderer = {
+    render: ({ count, position }, stats) =>
+
+      new google.maps.Marker({
+      label: { text: String(count), color: "#FFFFFF", fontSize: "12px", fontWeight: "600" },
+      icon: {
+          url: '/static/img/m1.png',
+          // scaledSize: new google.maps.Size(((maxDim - minDim) / (1 + Math.exp(-k*(count/stats.clusters.markers.max - x))) + minDim),((maxDim - minDim) / (1 + Math.exp(-k*(count/stats.clusters.markers.max - x))) + minDim)),
+          scaledSize: new google.maps.Size((40+(count/stats.clusters.markers.max)*50),(40+(count/stats.clusters.markers.max)*50))
+        },
+      position,
+      // adjust zIndex to be above other markers
+      zIndex: Number(google.maps.Marker.MAX_ZINDEX) + count,
+      })
+
+    };
+
+    // const markerCluster = new MarkerClusterer({ map, markers, renderer });
+    /*
+      {
+        map: map,
+        markers: markers,
+        renderer: renderer
+      }
+    */
+    MarkerClusters = new markerClusterer.MarkerClusterer({map: mapPhoto, markers: all_markers, renderer});
 
   //creates clusters for markers
   // MarkerClusters = new MarkerClusterer(mapPhoto, all_markers, {
@@ -218,7 +263,7 @@ MarkerClusters = new MarkerClusterer(mapPhoto, all_markers, renderer);
 //   }
   // });
 
-  console.log(MarkerClusters)
+  // console.log(MarkerClusters)
 }
 
 
