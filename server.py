@@ -19,9 +19,15 @@ def homepage():
 
 @app.route("/map")
 def view_basic_map():
-    """map"""
+    """photo map"""
 
     return render_template("map.html")
+
+@app.route("/map-neighbourhoods")
+def view_neighbourhoods_map():
+    """neighbourhoods map"""
+
+    return render_template("map-neighbourhoods.html")
 
 @app.route("/api/markers")
 def locations_info():

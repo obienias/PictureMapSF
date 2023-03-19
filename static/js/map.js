@@ -17,8 +17,8 @@ const sfCoords = {
 };
 let countTotal;
 let count;
-let start_hour = 0;
-let finish_hour = 0;
+let start_hour;
+let finish_hour;
 
 let minRange;
 let maxRange;
@@ -50,38 +50,38 @@ let maxRange;
 
 
 //function to generate dropdown menu for each hour
-// function generateDropdownHour(elemnent_id) {
+function generateDropdownHour(elemnent_id) {
 
-//   const select = document.getElementById(elemnent_id);
+  const select = document.getElementById(elemnent_id);
 
-//   for (var i = 0; i <= 23; i++) {
-//     var option = document.createElement("option");
-//     option.text = i + ":00";
-//     option.value = i;
-//     select.add(option);
-//   }
-// }
+  for (var i = 0; i <= 23; i++) {
+    var option = document.createElement("option");
+    option.text = i + ":00";
+    option.value = i;
+    select.add(option);
+  }
+}
 
-// generateDropdownHour("time_start_dropdown")
-// generateDropdownHour("time_end_dropdown")
+generateDropdownHour("time_start_dropdown")
+generateDropdownHour("time_end_dropdown")
 
-// const start_dropdown = document.querySelector("#time_start_dropdown");
-// const finish_dropdown = document.querySelector("#time_end_dropdown");
+const start_dropdown = document.querySelector("#time_start_dropdown");
+const finish_dropdown = document.querySelector("#time_end_dropdown");
 
-// start_hour = 0;
-// finish_hour = 0;
+start_hour = 0;
+finish_hour = 0;
 
-// start_dropdown.addEventListener('change', () => {
-//   start_hour = start_dropdown.value;
-//   console.log("start hour: " + start_hour);
-//   displayMarkers();
-// });
+start_dropdown.addEventListener('change', () => {
+  start_hour = start_dropdown.value;
+  console.log("start hour: " + start_hour);
+  displayMarkers();
+});
 
-// finish_dropdown.addEventListener('change', () => {
-//   finish_hour = finish_dropdown.value;
-//   console.log("finish hour: " + finish_hour);
-//   displayMarkers();
-// });
+finish_dropdown.addEventListener('change', () => {
+  finish_hour = finish_dropdown.value;
+  console.log("finish hour: " + finish_hour);
+  displayMarkers();
+});
 
 // Filter the photos based on the time of day
 function get_photo_by_hour(start, end, photos_info) {
@@ -153,6 +153,7 @@ function displayMarkers() {
           height: 20,
         }
       },
+      optimized: true,
       map: mapPhoto,
     })
     all_markers.push(photoMarker);
