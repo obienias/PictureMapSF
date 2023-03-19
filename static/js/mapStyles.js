@@ -203,7 +203,8 @@ const MAPSTYLES = [
     "elementType": "geometry",
     "stylers": [
       {
-        "color": "#c9c9c9"
+        "color": "#b6c3cc"
+        // "#c9c9c9"
       }
     ]
   },
