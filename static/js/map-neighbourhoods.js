@@ -88,6 +88,8 @@ function get_photo_by_hour(start, end, photos_info) {
 
 // }
 
+
+
 function filterPhotoNeighbourhood (filtered_photos, photosByNeighbourhood, newPolygon) {
   for (const photo of filtered_photos) {
     let photoLocation = {
@@ -174,6 +176,11 @@ function initMap() {
               neighbourhoodInfo.setContent(neighbourhoodInfoContent);
               neighbourhoodInfo.open(mapPhoto, centerMarker);
               let photos = filterPhotoNeighbourhood (filtered_photos, photosByNeighbourhood, newPolygon);
+              $(document).ready(function() {
+                $('#myCarousel').carousel({
+                  interval: 10000
+              })
+              });
               // mapPhoto.centerObject(newPolygon);
             });
             

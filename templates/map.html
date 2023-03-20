@@ -2,11 +2,21 @@
 
 {% block head %}
   <link rel="stylesheet" href="/static/css/maps.css"/>
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/noUiSlider/14.7.0/nouislider.min.css" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/noUiSlider/15.7.0/nouislider.min.css" />
   <script src="https://d3js.org/d3.v7.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/noUiSlider/15.7.0/nouislider.min.js"></script>
   <!-- /* Override default noUiSlider width */ -->
   <style>
+    .noUi-base .noUi-connects{
+      width: 50%
+    }
+    #slider-fit {
+    padding: 0 16px;
+}
+    #values-slider {
+      width:50%;
+      display: block;
+    }
   </style>
 
 {% endblock %}
@@ -14,14 +24,10 @@
 {% block body %}
 <h1>Welcome to SF PhotoMap!</h1>
 <nav>
-  <div id="slider-container">
-    <!-- <div id="slider-bar" class="theme-light" data-max="24" data-min="0" data-precision="0">
-       <input type="range" id="slider-handle-1" class="slider-handles" min="0" max="24" value="0"/>
-       <output for="slider-handle-1" id="slider-output-1"></output>
-       <input type="range" id="slider-handle-2" class="slider-handles" min="0" max="24" value="0"/>
-       <output for="slider-handle-2" id="slider-output-2"></output>
-    </div> -->
-</div>
+  <div id="values-slider">
+  </div>
+  <!-- <div id="arbitrary-values-slider">
+  </div> -->
   <br>
   <section>
     <label for="time_start_dropdown">Choose the starting hour:</label>
