@@ -20,6 +20,7 @@ class Photo(db.Model):
     photo_url = db.Column(db.String)
     author_id = db.Column(db.String(50))
     author_name = db.Column(db.String(50))
+    photo_url_main = db.Column(db.String)
 
 
     def __repr__(self):

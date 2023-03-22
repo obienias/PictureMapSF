@@ -16,15 +16,15 @@ search_query = {
     'lat': '37.773972',
     'lon': '-122.4194',
     'radius': '12',
-    'min_taken_date': '2023-01-01',
-    'max_taken_date': '2023-02-28',
+    'min_taken_date': '2023-02-01',
+    'max_taken_date': '2023-05-31',
     'page': 1,
     'per_page': 500,
 }
 
 # date initialisation - start and end date
-start_date = datetime(2022, 10, 1)
-end_date = datetime(2022, 12, 31)
+start_date = datetime(2022, 3, 1)
+end_date = datetime(2022, 5, 31)
  
 # define time deltas and output date format
 add_two_days = timedelta(days=2)
@@ -70,7 +70,9 @@ while start_date <= end_date:
             for photo in response['photos']['photo']:
                 photo_data = {
                     'id' : photo['id'],
-                    'secret' : photo['secret']
+                    'secret' : photo['secret'],
+                    'farm' : photo['farm'],
+                    'server' : photo['server']
                 }
                 results.append(photo_data)
 
@@ -111,8 +113,10 @@ for photo in results:
         time_taken = photo_info['photo']['dates'].get('taken')
         hour_taken = int(time_taken.split()[-1].split(':')[0])
         photo_url = f"https://farm{photo.get('farm')}.staticflickr.com/{photo.get('server')}/{photo.get('id')}_{photo.get('secret')}.jpg"
-        author_id = photo_info['photo']['owner'].get('nsid')
-        author_name = photo_info['photo']['owner'].get('username')
+        photo_url2 = f"https://live.statick.flickr.com/{photo.get('server')}/{photo.get('id')}_{photo.get('secret')}.jpg"]"
+        author_name = photo_info['photo']['owner'].get('nsid')
+        author_id = photo_info['photo']['owner'].get('username')
+        photo_url_main = f"https://www.flickr.com/photos/{author_id}/{photo.get('id')}"
         # author_profile_url = 1
         # tags = photo_info['photo'].get('tags')
 
@@ -126,7 +130,10 @@ for photo in results:
             'hour_taken': hour_taken,
             'photo_url': photo_url,
             'author_id': author_id,
-            'author_name': author_name
+            'author_name': author_name,
+            'photo_url2' : photo_url2
+            'photo_url_main' : photo_url_main
+
         }
 
         photo_list.append(photo_dict)
@@ -150,6 +157,6 @@ print (number)
 # photo_set = set(photo_list)
 # print(len(photo_set))
 
-with open("data/photos2.json", 'w') as f:
+with open("data/photosA - Copy (5).json", 'w') as f:
     json.dump(photo_list, f)
 
