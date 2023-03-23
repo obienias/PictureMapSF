@@ -25,11 +25,13 @@ let maxRange;
 
 let hoursList;
 
+let PhotoList;
+
 start_hour = 0;
 finish_hour = 0;
 
 var valuesSlider = document.getElementById('values-slider');
-var valuesForSlider = [0,'1 AM',2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24]; 
+var valuesForSlider = [0,'1 AM','2AM','3AM','4AM','5AM','6AM',7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24]; 
 
 var format = {
     to: function(value) {
@@ -127,6 +129,11 @@ function deleteMarkers() {
 
 };
 
+//wrap in event listener for bounds changed
+
+
+
+
 function displayMarkers() {
 
   //clears the markers
@@ -164,6 +171,7 @@ function displayMarkers() {
       position: {
         lat: photo.latitude,
         lng: photo.longitude,
+
       },
       title: `Photo title: ${photo.title}`,
       icon: {
@@ -206,10 +214,10 @@ function displayMarkers() {
       //   },
       icon: {
         path: google.maps.SymbolPath.CIRCLE,
-        scale: (15+(count/stats.clusters.markers.max)*25),
-        fillColor: "#BD3F16",
+        scale: (15+(count/stats.clusters.markers.max)*35),
+        fillColor: "#246F81",
         //246F81, 56d4ee, 04bceb, 244047, e57f84, 246F81, 6592A0
-        fillOpacity: 0.7,
+        fillOpacity: 0.5,
         strokeWeight: 0
       },
       position,
@@ -219,7 +227,11 @@ function displayMarkers() {
 
     };
 
-    MarkerClusters = new markerClusterer.MarkerClusterer({map: mapPhoto, markers: all_markers, renderer});
+    // const algorithm = new gridAlgorithm.GridAlgorithm({
+    //   gridSize: 60
+    // });
+
+    MarkerClusters = new markerClusterer.MarkerClusterer({ map: mapPhoto, markers: all_markers, renderer});
 
 }
 
@@ -227,6 +239,7 @@ function displayMarkers() {
 
 function initMap() {
   
+  //create map first, get bounds, get
 
   fetch('/api/markers')
     .then((response) => response.json())
@@ -235,6 +248,8 @@ function initMap() {
       photos_info = responseData;
 
       photoInfo = new google.maps.InfoWindow();
+
+
      
       displayMarkers();
            
@@ -248,6 +263,11 @@ function initMap() {
     mapTypeControl: false,
     streetViewControl: false,
   });
+mapPhoto.addListener('bounds_changed', () => {
+  console.log(mapPhoto.getBounds());
+  //filter markers by location
+
+});
 
 }
 

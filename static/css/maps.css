@@ -14,7 +14,7 @@ html, body {
 div.window-content {
   overflow: hidden;
   display: flex;
-  max-width: 300px;
+  max-width: 400px;
 }
 
 .photo-thumbnail {

@@ -22,11 +22,8 @@ let finish_hour;
 
 let minRange;
 let maxRange;
+let photoCountList =[];
 
-let neighbourhoodPhotoCount = [1, 6, 399, 0, 205, 17, 1, 40, 227, 58, 1619, 56, 35, 15, 19, 123, 420, 349, 755, 101, 624, 36, 8, 14, 92, 65, 63, 84, 88, 83, 110, 2339, 58, 91, 10, 8, 218, 309, 80, 9, 81, 5, 54, 100, 27, 472, 70, 42, 1, 7, 40, 80, 36, 471, 124, 156, 2, 14, 0, 17, 5, 385, 16, 14, 0, 4, 2, 0, 21, 0, 1, 0, 2, 0, 12, 0, 23, 0, 253, 0, 26, 16, 4, 1, 73, 55, 3, 6, 4, 0, 4, 9, 6, 0, 1, 6, 1, 86, 77, 352, 663, 36, 83, 25, 33, 683, 93, 2420, 86, 5, 0, 96, 156, 28, 52, 49, 1]
-let maxPhotoCount = Math.max(...neighbourhoodPhotoCount)
-let photoCount;
-let photoList;
 
 
 //function to generate dropdown menu for each hour
@@ -96,7 +93,6 @@ function get_photo_by_hour(start, end, photos_info) {
 
 
 function filterPhotoNeighbourhood (filtered_photos, photosByNeighbourhood, newPolygon) {
-  photosByNeighbourhood = []
   for (const photo of filtered_photos) {
     let photoLocation = {
       lat: photo.latitude,
@@ -106,66 +102,9 @@ function filterPhotoNeighbourhood (filtered_photos, photosByNeighbourhood, newPo
       photosByNeighbourhood.push(photo)
     }
   }   
-  console.log (photosByNeighbourhood)
+  // console.log (photosByNeighbourhood)
   return photosByNeighbourhood;
 }
-
-function getRandomPhotos(numPhotos) {
-  let randomPhotos = [];
-  let maxIndex = photoList.length - 1;
-
-  for (let i = 0; i < numPhotos; i++) {
-    let randomIndex = Math.floor(Math.random() * maxIndex);
-    randomPhotos.push(photoList[randomIndex]);
-  }
-  console.log(randomPhotos);
-  return randomPhotos;
-
-}
-
-function displayLightboxGallery(photos) {
-  // configure lightbox options as needed
-  let options = {};
-
-  // create an array of image URLs for the lightbox
-  let imageUrls = photos.map(photo => photo.photo_url);
-  console.log(imageUrls)
-
-  // create an array of captions for the lightbox
-  let captions = photos.map(photo => photo.title);
-
-  // display the lightbox
-  // $.fancybox.open(imageUrls, captions, options);
-
-  let fancyboxItems = photos.map(photo => ({
-    src: photo.photo_url,
-    thumb: photo.photo_url,
-    caption: photo.title
-  }));
-  
-  // display the lightbox
-  new Fancybox(
-    fancyboxItems,
-    {
-      hideScrollbar: false,
-    }
-  );
-  // new Fancybox(
-  //   // Array containing gallery items
-  //   [
-  //     // Gallery item
-  //     {
-  //       src: imageUrls,
-  //       thumb: imageUrls,
-  //     },
-  //   ],
-  //   // Gallery options
-  //   {
-  //     hideScrollbar: false,
-  //   }
-  // );
-}
-
 
 function initMap() {
   
@@ -178,7 +117,6 @@ function initMap() {
       filtered_photos = get_photo_by_hour(start_hour, finish_hour, photos_info);
       let photoCountTotal = filtered_photos.length;
       console.log (photoCountTotal);
-      
 
 
       fetch('/api/neighbourhoods')
@@ -201,22 +139,18 @@ function initMap() {
             return(bounds);
           };
 
-          let index = 0;
-
-          //creates polygins for each neighbourhood  4079829929
+          //creates polygins for each neighbourhood
           for (const item of neighbourhoods_info) {
             let coords =  JSON.parse(item.coordinates);
             const newPolygon = new google.maps.Polygon({
               title: item.name,
               paths: coords,
-              strokeColor: "#FFFFFF",
-              strokeOpacity: 0.5,
+              strokeColor: "##c9c9c9",
+              strokeOpacity: 0.3,
               strokeWeight: 1,
-              fillColor: "#246F81",
+              fillColor: "##c9c9c9",
               fillOpacity: 0.05,
             });
-
-            //"##c9c9c9"
 
             //creates instance of neighbourhood on map
             newPolygon.setMap(mapPhoto);
@@ -225,40 +159,19 @@ function initMap() {
             polygonList.push(newPolygon);
 
             //defines content for neighbourhood info-window
-            const neighbourhoodInfoContent = `
-              <div class="window-content">
 
-                <ul class="neighbourhood-info">
-                  <li><b>Neighbourhood name: </b>${item.name}</li>
-                  <li><b>Link: </b>${item.url}</li>
-                </ul>
-              </div>`
 
-            let PolyCenter = newPolygon.getBoundingBox().getCenter();
+            let photoCount = filterPhotoNeighbourhood (filtered_photos, photosByNeighbourhood, newPolygon).length;
 
-            const centerMarker = new google.maps.Marker({
-              position: PolyCenter,
-              visible: false,
-              map: mapPhoto,
-            })
-
-            photoCount = neighbourhoodPhotoCount[index]
-            newPolygon.setOptions({
-              fillOpacity: Math.min(0.1 + (photoCount / (maxPhotoCount)*1.4), 0.65),
-            });
-
-            index += 1;
+            photoCountList.push(photoCount)
+            // newPolygon.setOptions({
+            //   fillOpacity: Math.min(0.1 + (photoCount / (photoCountTotal))*2, 0.7),
+            // });
 
             google.maps.event.addListener(newPolygon, 'click', () => {
               neighbourhoodInfo.setContent(neighbourhoodInfoContent);
               neighbourhoodInfo.open(mapPhoto, centerMarker);
               let photos = filterPhotoNeighbourhood (filtered_photos, photosByNeighbourhood, newPolygon);
-
-              photoList = photos;
-
-              let numPhotos = 5; // specify the number of photos to display
-              let randomPhotos = getRandomPhotos(numPhotos);
-              displayLightboxGallery(randomPhotos);
 
               // mapPhoto.centerObject(newPolygon);
             });
