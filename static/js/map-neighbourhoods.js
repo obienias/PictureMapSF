@@ -150,20 +150,7 @@ function displayLightboxGallery(photos) {
       hideScrollbar: false,
     }
   );
-  // new Fancybox(
-  //   // Array containing gallery items
-  //   [
-  //     // Gallery item
-  //     {
-  //       src: imageUrls,
-  //       thumb: imageUrls,
-  //     },
-  //   ],
-  //   // Gallery options
-  //   {
-  //     hideScrollbar: false,
-  //   }
-  // );
+
 }
 
 
@@ -256,7 +243,7 @@ function initMap() {
 
               photoList = photos;
 
-              let numPhotos = 5; // specify the number of photos to display
+              let numPhotos = 20; // specify the number of photos to display
               let randomPhotos = getRandomPhotos(numPhotos);
               displayLightboxGallery(randomPhotos);
 

@@ -4,8 +4,10 @@
   <link rel="stylesheet" href="/static/css/maps.css"/>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/noUiSlider/15.7.0/nouislider.min.css" />
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
-  <script src="https://d3js.org/d3.v7.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/noUiSlider/15.7.0/nouislider.min.js"></script>
+  <script src="https://polyfill.io/v3/polyfill.min.js?features=default"></script>
+  <script src="https://unpkg.com/deck.gl@8.7.3/dist.min.js"></script>
+  <script src="https://unpkg.com/@deck.gl/google-maps@8.7.3/dist.min.js"></script>
   <!-- /* Override default noUiSlider width */ -->
   <style>
     .noUi-base .noUi-connects{
@@ -37,18 +39,7 @@
     <button type="button" class="btn btn-secondary" id="button-evening">Evening</button>
     <button type="button" class="btn btn-secondary" id="button-night">Night</button>
   </div>
-  <!-- <section>
-    <label for="time_start_dropdown">Choose the starting hour:</label>
-    <select name="time-start" id="time_start_dropdown">
-      <option value="">Select an hour</option>
-    </select>
-  </section>
-  <section>
-    <label for="time_end_dropdown">Choose the ending hour:</label>
-    <select name="time-start" id="time_end_dropdown">
-      <option value="">Select an hour</option>
-    </select>
-  </section> -->
+
 </nav>
 
   <section class="map">
@@ -62,13 +53,11 @@
   <script src="https://cdnjs.cloudflare.com/ajax/libs/noUiSlider/15.7.0/nouislider.min.js"></script>
   <script 
     src="/static/js/mapStyles.js"></script>
-  <script src="/static/js/map.js"></script>
+  <script src="/static/js/map - dataVisualization.js"></script>
   <script
     async
     src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBD6npB1SOMfDAjoVYfM1t3xEwq3XPRCXM&libraries=geometry&callback=initMap">
   </script>
-  <script 
-  async
-  src="https://unpkg.com/@googlemaps/markerclusterer/dist/index.min.js"></script>
+
     
 {% endblock %}

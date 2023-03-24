@@ -29,6 +29,12 @@ def view_neighbourhoods_map():
 
     return render_template("map-neighbourhoods.html")
 
+@app.route("/map-data-visualization")
+def view_data_visualization_map():
+    """data visualization map"""
+
+    return render_template("map - visualization.html")
+
 @app.route("/api/markers")
 def locations_info():
     """JSON information about bears."""

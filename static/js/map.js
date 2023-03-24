@@ -27,8 +27,8 @@ let hoursList;
 
 let PhotoList;
 
-start_hour = 0;
-finish_hour = 0;
+start_hour = 5;
+finish_hour = 12;
 
 var valuesSlider = document.getElementById('values-slider');
 var valuesForSlider = [0,'1 AM','2AM','3AM','4AM','5AM','6AM',7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24]; 
@@ -49,7 +49,7 @@ noUiSlider.create(valuesSlider, {
     // steps of 1
     step: 1,
     tooltips: true,
-    format: format,
+    // format: format,
     pips: { mode: 'steps', 
     // format: format,
     density: 50,
@@ -58,7 +58,7 @@ noUiSlider.create(valuesSlider, {
 });
 
 // The display values can be used to control the slider
-valuesSlider.noUiSlider.set(['1', '24']);
+valuesSlider.noUiSlider.set(['5', '12']);
 
 valuesSlider.addEventListener('click', function () {
   hoursList = valuesSlider.noUiSlider.get();
@@ -69,8 +69,39 @@ valuesSlider.addEventListener('click', function () {
   console.log(filtered_photos) 
 });
 
+function handleValuesSliderClick(Slider, start, end) {
+  Slider.addEventListener('click', function () {
+    console.log("button clicked")
+    valuesSlider.noUiSlider.set([start, end])
+    start_hour = start;
+    finish_hour = end;
+    console.log(start_hour, finish_hour);
+    displayMarkers();
+    console.log(filtered_photos);
+  });
+}
 
+let morning = document.getElementById('button-morning')
+handleValuesSliderClick(morning, '5', '12');
+let afternoon = document.getElementById('button-afternoon')
 
+handleValuesSliderClick(afternoon,'12', '17');
+let evening = document.getElementById('button-evening')
+
+handleValuesSliderClick(evening,'17', '21');
+let night = document.getElementById('button-night')
+
+handleValuesSliderClick(night,'21', '24');
+
+// valuesSlider.addEventListener('change', function () {
+//   console.log("slider changed")
+//   hoursList = valuesSlider.noUiSlider.get();
+//   start_hour = hoursList[0];
+//   finish_hour = hoursList[1];
+//   console.log(start_hour,finish_hour)
+//   displayMarkers();
+//   console.log(filtered_photos) 
+// });
 
 // //function to generate dropdown menu for each hour
 // function generateDropdownHour(elemnent_id) {
@@ -106,6 +137,7 @@ valuesSlider.addEventListener('click', function () {
 // });
 
 // Filter the photos based on the time of day
+
 function get_photo_by_hour(start, end, photos_info) {
   let filtered_photos = [];
   if (start === 0 || end === 0) {
@@ -175,7 +207,7 @@ function displayMarkers() {
       },
       title: `Photo title: ${photo.title}`,
       icon: {
-        url: '/static/img/marker_color.png',
+        url: '/static/img/marker_color2.png',
         scaledSize: {
           width: 20,
           height: 20,
@@ -196,10 +228,10 @@ function displayMarkers() {
   }
 
     countTotal = all_markers.length
-    const maxDim= 200;
-    const minDim = 30;
-    const k = 5;
-    const x = 0.35;
+    // const maxDim= 200;
+    // const minDim = 30;
+    // const k = 5;
+    // const x = 0.35;
 
 
     const renderer = {
@@ -248,8 +280,6 @@ function initMap() {
       photos_info = responseData;
 
       photoInfo = new google.maps.InfoWindow();
-
-
      
       displayMarkers();
            
@@ -263,11 +293,29 @@ function initMap() {
     mapTypeControl: false,
     streetViewControl: false,
   });
-mapPhoto.addListener('bounds_changed', () => {
-  console.log(mapPhoto.getBounds());
-  //filter markers by location
+// mapPhoto.addListener('idle', () => {
+//   console.log(mapPhoto.getBounds());
+//   //filter markers by location
 
-});
+// });
+
+// mapPhoto.addListener('bounds_changed', () => {
+//   const bounds = mapPhoto.getBounds();
+//   console.log(bounds);
+
+//   // Filter the markers to show only those within the map bounds
+//   const filteredMarkers = all_markers.filter(marker => bounds.contains(marker.getPosition()));
+
+//   // Hide the markers that are outside the map bounds
+//   all_markers.forEach(marker => {
+//     if (!bounds.contains(marker.getPosition())) {
+//       marker.setMap(null);
+//     }
+//   });
+
+//   // Show the filtered markers
+//   filteredMarkers.forEach(marker => marker.setMap(mapPhoto));
+// });
 
 }
 
