@@ -21,17 +21,17 @@ let finish_hour;
 
 let minRange;
 let maxRange;
-// let maxPhotoCount = Math.max(...neighbourhoodPhotoCount)
 let photoCount;
 let photoList;
 let hoursList;
+let deckOverlay = null;
 
 const ScatterplotLayer = deck.ScatterplotLayer;
 const GeoJsonLayer = deck.GeoJsonLayer;
 const GoogleMapsOverlay = deck.GoogleMapsOverlay;
 
-start_hour = 1;
-finish_hour = 24;
+start_hour = 3;
+finish_hour = 21;
 
 var valuesSlider = document.getElementById('values-slider');
 var valuesForSlider = [0,'1 AM','2AM','3AM','4AM','5AM','6AM',7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24]; 
@@ -61,14 +61,14 @@ noUiSlider.create(valuesSlider, {
 });
 
 // The display values can be used to control the slider
-valuesSlider.noUiSlider.set(['5', '12']);
+valuesSlider.noUiSlider.set(['1', '24']);
 
 valuesSlider.addEventListener('click', function () {
   hoursList = valuesSlider.noUiSlider.get();
   start_hour = hoursList[0];
   finish_hour = hoursList[1];
   console.log(start_hour,finish_hour)
-  get_photo_by_hour(start_hour, finish_hour, photos_info);
+  renderData();
   // console.log(filtered_photos) 
 });
 
@@ -79,7 +79,7 @@ function handleValuesSliderClick(Slider, start, end) {
     start_hour = start;
     finish_hour = end;
     console.log(start_hour, finish_hour);
-    get_photo_by_hour(start_hour, finish_hour, photos_info);
+    renderData();
     // console.log(filtered_photos);
   });
 }
@@ -115,21 +115,42 @@ function get_photo_by_hour(start, end, photos_info) {
 
 
 
-function filterPhotoNeighbourhood (filtered_photos, photosByNeighbourhood, newPolygon) {
-  photosByNeighbourhood = []
-  for (const photo of filtered_photos) {
-    let photoLocation = {
-      lat: photo.latitude,
-      lng: photo.longitude,
-    }
-    if (google.maps.geometry.poly.containsLocation(photoLocation, newPolygon)) {
-      photosByNeighbourhood.push(photo)
-    }
-  }   
-  console.log (photosByNeighbourhood)
-  return photosByNeighbourhood;
-}
+function renderData() {
+  if (deckOverlay){
+    deckOverlay.setMap(null)};
+  filtered_photos = get_photo_by_hour(start_hour, finish_hour, photos_info);
+  console.log(filtered_photos)
+  deckOverlay = new GoogleMapsOverlay({
+    layers: [
+      new ScatterplotLayer({
+        id: "photos",
+        data: filtered_photos,
+        // data: [{rad: 1000, longitude:-122.431297 ,latitude: 37.773972}],
+        pickable: true,
+        opacity: 0.3,
+        stroked: true,
+        filled: true,
+        pointRadiusScale: 6,
+        // radiusMinPixels: 1,
+        // radiusMaxPixels: 100,
+        // lineWidthMinPixels: 1,
+        getPosition: d => [d.longitude, d.latitude],
+        getRadius: 40,
+        getFillColor:  d => {
+          if (d.hour_taken < 13) {
+            return [255, 0, 128]; // Pink color
+          } else {
+            return [0, 128, 255]; // Blue color
+          }
+        },
+        // getFillColor:d => [36, 111, 129],
+        getLineColor: d => [0, 0, 0]
 
+      }),
+    ],
+  });
+  deckOverlay.setMap(mapPhoto);
+}
 
 
 function initMap() {
@@ -140,69 +161,7 @@ function initMap() {
     .then((responseData) => {
 
       photos_info = responseData;
-      filtered_photos = get_photo_by_hour(start_hour, finish_hour, photos_info);
-      // let photoCountTotal = filtered_photos.length;
-      // console.log (photoCountTotal);
-
-      // const deckOverlay = new GoogleMapsOverlay({
-      //   layers: [
-      //     new GeoJsonLayer({
-      //       id: "earthquakes",
-      //       data: "https://earthquake.usgs.gov/earthquakes/feed/v1.0/summary/all_month.geojson",
-      //       filled: true,
-      //       pointRadiusMinPixels: 2,
-      //       pointRadiusMaxPixels: 200,
-      //       opacity: 0.4,
-      //       pointRadiusScale: 0.3,
-      //       getRadius: (f) => Math.pow(10, f.properties.mag),
-      //       getFillColor: [255, 70, 30, 180],
-      //       autoHighlight: true,
-      //       // transitions: {
-      //       //   getRadius: {
-      //       //     type: "spring",
-      //       //     stiffness: 0.1,
-      //       //     damping: 0.15,
-      //       //     enter: () => [0],
-      //       //     duration: 10000,
-      //       //   },
-      //       // },
-      //       // onDataLoad: () => {
-      //       //   /* eslint-disable no-undef */
-      //       //   // @ts-ignore defined in include
-      //       //   progress.done(); // hides progress bar
-      //       //   /* eslint-enable no-undef */
-      //       // },
-      //     }),
-      //   ],
-      // });
-    
-      // deckOverlay.setMap(mapPhoto);
-
-      const deckOverlay = new GoogleMapsOverlay({
-        layers: [
-          new ScatterplotLayer({
-            id: "photos",
-            data: filtered_photos,
-            // data: [{rad: 1000, longitude:-122.431297 ,latitude: 37.773972}],
-            pickable: true,
-            opacity: 0.4,
-            stroked: true,
-            filled: true,
-            pointRadiusScale: 6,
-            // radiusMinPixels: 1,
-            // radiusMaxPixels: 100,
-            // lineWidthMinPixels: 1,
-            getPosition: d => [d.longitude, d.latitude],
-            getRadius: 60,
-            getFillColor: d => [36, 111, 129],
-            getLineColor: d => [0, 0, 0]
-
-          }),
-        ],
-      });
-
-      console.log("cccc")
-      deckOverlay.setMap(mapPhoto);
+      renderData();
 
     });
 
