@@ -27,6 +27,7 @@ let ratioList = [];
 let photoCount;
 let photoList;
 
+
 //calculate ration of neighbourhood area to photo count
 for (let i = 0; i < neighbourhoodPhotoCount.length; i++) {
   let ratio = neighbourhoodPhotoCount[i] / neighbourhoodAreaList[i];
@@ -137,7 +138,7 @@ function displayLightboxGallery(photos) {
   let options = {};
 
   // create an array of image URLs for the lightbox
-  let imageUrls = photos.map(photo => photo.photo_url);
+  let imageUrls = photos.map(photo => photo.photo_url2);
   console.log(imageUrls)
 
   // create an array of captions for the lightbox
@@ -147,8 +148,8 @@ function displayLightboxGallery(photos) {
   // $.fancybox.open(imageUrls, captions, options);
 
   let fancyboxItems = photos.map(photo => ({
-    src: photo.photo_url,
-    thumb: photo.photo_url,
+    src: photo.photo_url2,
+    thumb: photo.photo_url2,
     caption: photo.title
   }));
   
@@ -210,7 +211,7 @@ function initMap() {
             neighbourhoodNamesList.push(name);
           };
 
-          console.log (neighbourhoodNamesList);
+          // console.log (neighbourhoodNamesList);
 
           const neighbourhoodRatios = neighbourhoodPhotoCount.map((count, index) => {
             const ratio = count / neighbourhoodAreaList[index];
@@ -226,6 +227,52 @@ function initMap() {
           // Update the HTML element with the list of popular neighbourhood names
           const neighbourhoodListElement = document.querySelector('#neighbourhood_list');
           neighbourhoodListElement.innerHTML = `<ul><li>${popularNeighbourhoodNames.join('</li><li>')}</li></ul>`;
+
+          // neighbourhoodListElement.querySelectorAll('li').forEach((listItem) => {
+          //   // get the name of the neighbourhood from the list item
+          //   const neighbourhoodName = listItem.textContent;
+          
+          //   // find the polygon on the map with the same title as the neighbourhood
+          //   const neighbourhoodPolygon = polygonList.find((polygon) => polygon.getTitle() === neighbourhoodName);
+          
+          //   // add click event listener to the list item
+          //   listItem.addEventListener('click', () => {
+          //     // open the info window for the neighbourhood polygon
+          //     for (const item of neighbourhoods_info) {
+          //       neighbourhoodInfoContent = `
+          //     <div class="window-content">
+
+          //       <ul class="neighbourhood-info">
+          //         <li><b>Neighbourhood name: </b>${item.name}</li>
+          //         <li><b>Link: </b>${item.url2}</li>
+          //         <button onclick="openLightboxGallery()">View Photos</button>
+          //       </ul>
+          //     </div>`};
+          //     neighbourhoodInfo.setContent(neighbourhoodInfoContent);
+          //     neighbourhoodInfo.open(mapPhoto, mapPhoto.getBounds().getCenter());
+          //   });
+          // });
+
+          // popularNeighbourhoodNames.forEach(name => {
+          //   const listItem = neighbourhoodListElement.querySelector(`"li:contains('${name}')"`);
+          //   listItem.addEventListener('click', () => {
+          //     // Find the polygon with the corresponding neighbourhood name and open the info window
+          //     const polygon = polygonList.find(p => p.title === name);
+          //     if (polygon) {
+          //       const neighbourhoodInfoContent = `
+          //         <div class="window-content">
+          
+          //           <ul class="neighbourhood-info">
+          //             <li><b>Neighbourhood name: </b>${polygon.title}</li>
+          //             <li><b>Link: </b>${item.url2}</li>
+          //             <button onclick="openLightboxGallery()">View Photos</button>
+          //           </ul>
+          //         </div>`;
+          //       neighbourhoodInfo.setContent(neighbourhoodInfoContent);
+          //       neighbourhoodInfo.open(mapPhoto, polygon.getBounds().getCenter());
+          //     }
+          //   });
+          // });
 
           let index = 0;
 
@@ -251,7 +298,7 @@ function initMap() {
             polygonList.push(newPolygon);
 
             //defines content for neighbourhood info-window
-            const neighbourhoodInfoContent = `
+            let neighbourhoodInfoContent = `
               <div class="window-content">
 
                 <ul class="neighbourhood-info">
@@ -274,13 +321,13 @@ function initMap() {
               fillOpacity: Math.min(0.1 + (photoRatioCount / (maxPhotoCount)*1.4), 0.65),
             });
 
-            console.log(Math.min(0.1 + (photoRatioCount / (maxPhotoCount)*1.4), 0.65))
 
             index += 1;
 
             google.maps.event.addListener(newPolygon, 'click', () => {
               neighbourhoodInfo.setContent(neighbourhoodInfoContent);
               neighbourhoodInfo.open(mapPhoto, centerMarker);
+              console.log(item.name)
               let photos = filterPhotoNeighbourhood (photos_info, photosByNeighbourhood, newPolygon);
 
               photoList = photos;
@@ -291,6 +338,16 @@ function initMap() {
 
               // mapPhoto.centerObject(newPolygon);
             });
+
+            google.maps.event.addListener(newPolygon, 'mouseover', () => {
+              newPolygon.setOptions({
+                fillOpacity: 0.65,
+              });
+            });
+
+            google.maps.event.addListener(newPolygon,"mouseout", () => {
+              newPolygon.setOptions({fillOpacity: Math.min(0.1 + (photoRatioCount / (maxPhotoCount)*1.4), 0.65)});
+             });
             
             
           }

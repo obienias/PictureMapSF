@@ -3,7 +3,7 @@
 from model import db, Photo, Neighbourhood, connect_to_db
 
 
-def create_photo(photo_id, title, latitude, longitude, time_taken, hour_taken, photo_url, author_id, author_name, photo_url_main):
+def create_photo(photo_id, title, latitude, longitude, time_taken, hour_taken, photo_url, photo_url2, author_id, author_name, photo_url_main):
     photo = Photo(
         photo_id =photo_id, 
         title=title, 
@@ -12,6 +12,7 @@ def create_photo(photo_id, title, latitude, longitude, time_taken, hour_taken, p
         time_taken=time_taken, 
         hour_taken=hour_taken, 
         photo_url=photo_url, 
+        photo_url2 = photo_url2,
         author_id=author_id, 
         author_name=author_name,
         photo_url_main=photo_url_main

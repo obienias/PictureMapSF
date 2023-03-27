@@ -138,6 +138,33 @@ handleValuesSliderClick(night,'21', '24');
 
 // Filter the photos based on the time of day
 
+// function filterPhotoBounds (filtered_photos, photosByNeighbourhood, newPolygon) {
+//   photosByBounds = []
+//   for (const photo of filtered_photos) {
+//     let photoLocation = {
+//       lat: photo.latitude,
+//       lng: photo.longitude,
+//     }
+//     if (google.maps.geometry.poly.containsLocation(photoLocation, newPolygon)) {
+//       photosByNeighbourhood.push(photo)
+//     }
+//   }   
+//   return photosByBounds;
+}
+
+function getRandomPhotos(numPhotos) {
+  let randomPhotos = [];
+  let maxIndex = photoList.length - 1;
+
+  for (let i = 0; i < numPhotos; i++) {
+    let randomIndex = Math.floor(Math.random() * maxIndex);
+    randomPhotos.push(photoList[randomIndex]);
+  }
+  console.log(randomPhotos);
+  return randomPhotos;
+
+}
+
 function get_photo_by_hour(start, end, photos_info) {
   let filtered_photos = [];
   if (start === 0 || end === 0) {
@@ -186,7 +213,7 @@ function displayMarkers() {
     <div class="window-content">
       <div class="photo-thumbnail">
         <img
-          src=${photo.photo_url}
+          src=${photo.photo_url2}
           alt="photo-thumbnail"
         />
       </div>

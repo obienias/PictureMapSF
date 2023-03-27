@@ -4,8 +4,11 @@
 
 import json
 
-list_files = ["data/photosA.json", "data/photosA - Copy.json","data/photosA - Copy (2).json","data/photosA - Copy (3).json",
-"data/photosA - Copy (4).json","data/photosA - Copy (5).json"]
+# list_files = ["data/photosA.json", "data/photosA - Copy.json","data/photosA - Copy (2).json","data/photosA - Copy (3).json",
+# "data/photosA - Copy (4).json","data/photosA - Copy (5).json"]
+
+list_files = ["data/photosA_all.json"]
+
 
 photos_list = []
 
@@ -16,7 +19,12 @@ for item in list_files:
 
 
     for d in photo_data:
-        # dict[photo_url2] = f"https://live.staticflr'].{dict[author_id]}"
+        url = d['photo_url']
+        start = url.find('_') + 1  # find the index of the underscore and add 1 to get the start of the number
+        end = url.find('.jpg')  # find the index of the ".jpg"
+
+        secret = url[start:end]  # extract the number using slicing 
+        d['photo_url2'] = f"https://live.staticflickr.com/65535/{d['photo_id']}_{secret}_b.jpg"
         d['photo_url_main'] = f"https://www.flickr.com/photos/{d['author_id']}/{d['photo_id']}"
 
     # print (len(photo_data))
@@ -40,7 +48,7 @@ for item in list_files:
 # print (photos_list)
 # print (len(photos_list))
 
-with open("data/photosA_all.json", 'w') as f:
+with open("data/photosA_all-all.json", 'w') as f:
     json.dump(photos_list, f)
 
 

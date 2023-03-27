@@ -185,7 +185,7 @@ function renderData() {
         html:`  <div>
               <div class="photo-thumbnail">
               <img
-                src=${object.photo_url}
+                src=${object.photo_url2}
                 alt="photo-thumbnail"
               />
             </div>

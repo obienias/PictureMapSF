@@ -18,6 +18,7 @@ class Photo(db.Model):
     time_taken = db.Column(db.String)
     hour_taken = db.Column(db.Integer)
     photo_url = db.Column(db.String)
+    photo_url2 = db.Column(db.String)
     author_id = db.Column(db.String(50))
     author_name = db.Column(db.String(50))
     photo_url_main = db.Column(db.String)

@@ -49,6 +49,7 @@ def locations_info():
             "longitude": photo.longitude,
             "hour_taken" : photo.hour_taken,
             "photo_url": photo.photo_url,
+            "photo_url2": photo.photo_url2,
             "author_name": photo.author_name,
             "time_taken": photo.time_taken,
             "photo_url_main": photo.photo_url_main

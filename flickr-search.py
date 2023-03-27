@@ -107,6 +107,7 @@ for photo in results:
 
         #retrieve parameters using get method
         photo_id = int(photo.get('id'))
+        server = photo.get('server')
         title = photo_info['photo']['title']['_content']
         latitude = float(photo_info['photo']['location'].get('latitude'))
         longitude = float(photo_info['photo']['location'].get('longitude'))
@@ -124,6 +125,7 @@ for photo in results:
         photo_dict = {
             'photo_id': photo_id,
             'title': title,
+            'server': server
             'latitude': latitude,
             'longitude': longitude,
             'time_taken': time_taken,
