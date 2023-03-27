@@ -1,4 +1,5 @@
 from shapely.geometry import Point, Polygon
+from shapely.geometry.polygon import orient
 import model
 from model import connect_to_db, db, Photo, Neighbourhood
 import crud
@@ -13,6 +14,7 @@ neighbourhoods_all = crud.get_neighbourhoods()
 
 photoLocationList = []
 polygonList = []
+areaList = []
 
 for photo in photos_all:
     photoLocation = Point(photo.latitude, photo.longitude)
@@ -35,21 +37,14 @@ for poly in neighbourhoods_all:
     # print(polygon_coords)
     polygon = Polygon(polygon_coords)
     polygonList.append(polygon)
+    # object = orient(polygon)
+    area = polygon.area * 10000    
+    print (area, poly.name)
+    areaList.append(area)
 
 # print (polygonList)
 
 neighbourhoodPhotoCount = []
-
-
-# x=0
-# for item in polygonList:
-    
-#     for point in photoLocationList:
-#         if polygon.contains(point):
-#             x+=1
-#             print (x)
-#     neighbourhoodPhotoCount.append(x)
-
 
 for polygon in polygonList:
     count = 0
@@ -62,4 +57,5 @@ for polygon in polygonList:
 
 
 print (neighbourhoodPhotoCount)
+print (areaList)
 

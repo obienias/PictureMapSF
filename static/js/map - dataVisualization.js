@@ -85,16 +85,16 @@ function handleValuesSliderClick(Slider, start, end) {
 }
 
 let morning = document.getElementById('button-morning')
-handleValuesSliderClick(morning, '5', '12');
+handleValuesSliderClick(morning, '5', '13');
 let afternoon = document.getElementById('button-afternoon')
 
-handleValuesSliderClick(afternoon,'12', '17');
+handleValuesSliderClick(afternoon,'13', '16');
 let evening = document.getElementById('button-evening')
 
-handleValuesSliderClick(evening,'17', '21');
+handleValuesSliderClick(evening,'16', '20');
 let night = document.getElementById('button-night')
 
-handleValuesSliderClick(night,'21', '24');
+handleValuesSliderClick(night,'20', '24');
 
 
 // Filter the photos based on the time of day
@@ -131,6 +131,7 @@ function renderData() {
         stroked: true,
         filled: true,
         pointRadiusScale: 6,
+        pickable: true,
         // radiusMinPixels: 1,
         // radiusMaxPixels: 100,
         // lineWidthMinPixels: 1,
@@ -138,18 +139,71 @@ function renderData() {
         getRadius: 40,
         getFillColor:  d => {
           if (d.hour_taken < 13) {
-            return [255, 0, 128]; // Pink color
+            return [255, 166, 0]; // Pink color
+          } else if (d.hour_taken < 18) {
+            return [239,86,117]; // Blue color
           } else {
-            return [0, 128, 255]; // Blue color
-          }
-        },
+            return [0,63,92]; // Blue color
+          }},
+        // getFillColor:  d => {
+        //   if (d.hour_taken < 13) {
+        //     return [255, 0, 128]; // Pink color
+        //   } else {
+        //     return [0, 128, 255]; // Blue color
+        //   }
+        // },
+        // getFillColor:  d => {
+        //   if (d.hour_taken < 13) {
+        //     return [255, 255, 0]; // Pink color
+        //   } else if (d.hour_taken < 16) {
+        //     return [128, 0, 128]; // Blue color
+        //   } else if (d.hour_taken < 20) {
+        //     return [0, 128, 128]; // Blue color
+        //   } else {
+        //     return [0, 0, 255]; // Blue color
+        //   }
+        // },
+
+        // getFillColor:  d => {
+        //   if (d.hour_taken < 13) {
+        //     return [255, 166, 0]; // Pink color
+        //   } else if (d.hour_taken < 16) {
+        //     return [239,86,117]; // Blue color
+        //   } else if (d.hour_taken < 20) {
+        //     return [122,81,149]; // Blue color
+        //   } else {
+        //     return [0,63,92]; // Blue color
+        //   }
         // getFillColor:d => [36, 111, 129],
-        getLineColor: d => [0, 0, 0]
+        getLineColor: d => [0, 0, 0],
 
       }),
     ],
   });
-  deckOverlay.setMap(mapPhoto);
+    let props = {
+      getTooltip: ({object}) => object && { 
+        html:`  <div>
+              <div class="photo-thumbnail">
+              <img
+                src=${object.photo_url}
+                alt="photo-thumbnail"
+              />
+            </div>
+            <div><b>Title:</b> ${object.title}</div>
+            <div><b>Author:</b> ${object.author_name}</div>
+          </div>`,
+
+          style: {
+            backgroundColor: '#fff',
+            color: '#333359',
+            fontSize: '0.8em',
+            borderRadius: '6px',
+            padding: '0px 10px 10px 10px'
+          }
+      }
+    };
+    deckOverlay.setMap(mapPhoto);
+    deckOverlay.setProps(props)
 }
 
 
