@@ -30,8 +30,13 @@ let photoList;
 start_hour = 5;
 finish_hour = 12;
 
+let mapBounds;
+let photosByBounds;
+
+let squarePhotoUrl;
+
 var valuesSlider = document.getElementById('values-slider');
-var valuesForSlider = [0,'1 AM','2AM','3AM','4AM','5AM','6AM',7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24]; 
+var valuesForSlider = [0,'1 AM','2 AM','3 AM','4 AM','5 AM','6 AM','7 AM','8 AM','9 AM','1 0AM', '11 AM' ,'12 PM','1 PM', '2 PM', '3 PM', '4 PM', '5 PM','6 PM', '7 PM','8 PM','9 PM','10 PM','11 PM', '12 AM']; 
 
 var format = {
     to: function(value) {
@@ -97,31 +102,62 @@ handleValuesSliderClick(night,'21', '24');
 
 // Filter the photos based on the time of day
 
-// function filterPhotoBounds (filtered_photos, photosByNeighbourhood, newPolygon) {
-//   photosByBounds = []
-//   for (const photo of filtered_photos) {
-//     let photoLocation = {
-//       lat: photo.latitude,
-//       lng: photo.longitude,
-//     }
-//     if (google.maps.geometry.poly.containsLocation(photoLocation, newPolygon)) {
-//       photosByNeighbourhood.push(photo)
-//     }
-//   }   
-//   return photosByBounds;
+function filterPhotoBounds (filtered_photos, photosByBounds, mapBounds) {
+  photosByBounds = []
+  for (const photo of filtered_photos ) {
+    if (photo.author_name !== "anthonynachor") {
+      let photoLocation = {
+        lat: photo.latitude,
+        lng: photo.longitude,
+      }
+      if (mapBounds.contains(photoLocation)) {
+        photosByBounds.push(photo)
+      }
+    }   
+    }
+    
+  return photosByBounds;
+};
+
+// function getRandomPhotos(numPhotos) {
+//   let randomPhotos = [];
+//   let indicesList = [];
+//   let maxIndex = photoList.length - 1;
+
+//   for (let i = 0; i < numPhotos; i++) {
+//     let randomIndex = Math.floor(Math.random() * maxIndex);
+//     randomPhotos.push(photoList[randomIndex]);
+//     indicesList.push(randomIndex);
+//   }
+//   console.log(randomPhotos);
+//   console.log(indicesList);
+//   return randomPhotos;
+
 // }
+
 
 function getRandomPhotos(numPhotos) {
   let randomPhotos = [];
+  let indicesList = [];
   let maxIndex = photoList.length - 1;
 
-  for (let i = 0; i < numPhotos; i++) {
-    let randomIndex = Math.floor(Math.random() * maxIndex);
-    randomPhotos.push(photoList[randomIndex]);
+  if (numPhotos > photoList.length) {
+    numPhotos = photoList.length;
   }
-  console.log(randomPhotos);
-  return randomPhotos;
 
+  for (let i = 0; i < numPhotos; i++) {
+    let randomIndex;
+    do {
+      randomIndex = Math.floor(Math.random() * maxIndex);
+    } while (indicesList.includes(randomIndex) && indicesList.length < maxIndex);
+
+    randomPhotos.push(photoList[randomIndex]);
+    indicesList.push(randomIndex);
+  }
+
+  console.log(randomPhotos);
+  console.log(indicesList);
+  return randomPhotos;
 }
 
 function get_photo_by_hour(start, end, photos_info) {
@@ -147,7 +183,6 @@ function deleteMarkers() {
 
 };
 
-//wrap in event listener for bounds changed
 
 function displayMarkers() {
 
@@ -253,7 +288,7 @@ function displayMarkers() {
 function generateGalleryHTML(images) {
   const items = images.map(image => `
     <a href="${image.photo_url2}" data-fancybox="gallery" data-caption="Image caption">
-      <img src="${image.photo_url2}" />
+      <img src="${squarePhotoUrl= image.photo_url2.replace("_b.","_q.")}" />
     </a>
   `);
   const html = `
@@ -278,10 +313,27 @@ function initMap() {
       photoList = photos_info;
      
       displayMarkers();
+      mapPhoto.addListener('idle', () => {
 
-      const randomImages = getRandomPhotos(18);
-      const galleryHTML = generateGalleryHTML(randomImages);
-      document.querySelector("#gallery").innerHTML = galleryHTML;
+        mapBounds = mapPhoto.getBounds();
+        console.log(mapBounds);
+    
+        let photos = filterPhotoBounds(filtered_photos, photosByBounds, mapBounds);
+        photoList = photos;
+    
+        const randomImages = getRandomPhotos(18);
+        const galleryHTML = generateGalleryHTML(randomImages);
+        document.querySelector("#gallery").innerHTML = galleryHTML;
+        
+        //filter markers by location
+      });
+
+      // let photos = filterPhotoNeighbourhood (photos_info, photosByNeighbourhood, newPolygon);
+      // photoList = photos;
+
+      // const randomImages = getRandomPhotos(18);
+      // const galleryHTML = generateGalleryHTML(randomImages);
+      // document.querySelector("#gallery").innerHTML = galleryHTML;
            
     });
 
@@ -292,29 +344,21 @@ function initMap() {
     mapTypeControl: false,
     streetViewControl: false,
   });
-// mapPhoto.addListener('idle', () => {
-//   console.log(mapPhoto.getBounds());
-//   //filter markers by location
+  // mapPhoto.addListener('idle', () => {
 
-// });
+  //   mapBounds = mapPhoto.getBounds();
+  //   console.log(mapBounds);
 
-// mapPhoto.addListener('bounds_changed', () => {
-//   const bounds = mapPhoto.getBounds();
-//   console.log(bounds);
+  //   let photos = filterPhotoBounds(photoList, photosByBounds, mapBounds);
+  //   photoList = photos;
 
-//   // Filter the markers to show only those within the map bounds
-//   const filteredMarkers = all_markers.filter(marker => bounds.contains(marker.getPosition()));
+  //   const randomImages = getRandomPhotos(18);
+  //   const galleryHTML = generateGalleryHTML(randomImages);
+  //   document.querySelector("#gallery").innerHTML = galleryHTML;
+    
+  //   //filter markers by location
+  // });
 
-//   // Hide the markers that are outside the map bounds
-//   all_markers.forEach(marker => {
-//     if (!bounds.contains(marker.getPosition())) {
-//       marker.setMap(null);
-//     }
-//   });
-
-//   // Show the filtered markers
-//   filteredMarkers.forEach(marker => marker.setMap(mapPhoto));
-// });
 
 }
 
