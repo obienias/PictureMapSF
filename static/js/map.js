@@ -25,7 +25,7 @@ let maxRange;
 
 let hoursList;
 
-let PhotoList;
+let photoList;
 
 start_hour = 5;
 finish_hour = 12;
@@ -93,48 +93,7 @@ let night = document.getElementById('button-night')
 
 handleValuesSliderClick(night,'21', '24');
 
-// valuesSlider.addEventListener('change', function () {
-//   console.log("slider changed")
-//   hoursList = valuesSlider.noUiSlider.get();
-//   start_hour = hoursList[0];
-//   finish_hour = hoursList[1];
-//   console.log(start_hour,finish_hour)
-//   displayMarkers();
-//   console.log(filtered_photos) 
-// });
 
-// //function to generate dropdown menu for each hour
-// function generateDropdownHour(elemnent_id) {
-
-//   const select = document.getElementById(elemnent_id);
-
-//   for (var i = 0; i <= 23; i++) {
-//     var option = document.createElement("option");
-//     option.text = i + ":00";
-//     option.value = i;
-//     select.add(option);
-//   }
-// }
-
-// generateDropdownHour("time_start_dropdown")
-// generateDropdownHour("time_end_dropdown")
-
-// const start_dropdown = document.querySelector("#time_start_dropdown");
-// const finish_dropdown = document.querySelector("#time_end_dropdown");
-
-
-
-// start_dropdown.addEventListener('change', () => {
-//   start_hour = start_dropdown.value;
-//   console.log("start hour: " + start_hour);
-//   displayMarkers();
-// });
-
-// finish_dropdown.addEventListener('change', () => {
-//   finish_hour = finish_dropdown.value;
-//   console.log("finish hour: " + finish_hour);
-//   displayMarkers();
-// });
 
 // Filter the photos based on the time of day
 
@@ -150,7 +109,7 @@ handleValuesSliderClick(night,'21', '24');
 //     }
 //   }   
 //   return photosByBounds;
-}
+// }
 
 function getRandomPhotos(numPhotos) {
   let randomPhotos = [];
@@ -189,9 +148,6 @@ function deleteMarkers() {
 };
 
 //wrap in event listener for bounds changed
-
-
-
 
 function displayMarkers() {
 
@@ -294,7 +250,19 @@ function displayMarkers() {
 
 }
 
-
+function generateGalleryHTML(images) {
+  const items = images.map(image => `
+    <a href="${image.photo_url2}" data-fancybox="gallery" data-caption="Image caption">
+      <img src="${image.photo_url2}" />
+    </a>
+  `);
+  const html = `
+    <div class="grid">
+      ${items.join("")}
+    </div>
+  `;
+  return html;
+}
 
 function initMap() {
   
@@ -307,10 +275,14 @@ function initMap() {
       photos_info = responseData;
 
       photoInfo = new google.maps.InfoWindow();
+      photoList = photos_info;
      
       displayMarkers();
-           
 
+      const randomImages = getRandomPhotos(18);
+      const galleryHTML = generateGalleryHTML(randomImages);
+      document.querySelector("#gallery").innerHTML = galleryHTML;
+           
     });
 
   mapPhoto = new google.maps.Map(document.querySelector('#map'), {

@@ -204,15 +204,14 @@ function initMap() {
           };
 
           
-
+          // list od neighbourhood names
           let neighbourhoodNamesList = [];
           for (const item of neighbourhoods_info) {
             let name = item.name;
             neighbourhoodNamesList.push(name);
           };
 
-          // console.log (neighbourhoodNamesList);
-
+          //ratio of photos to area
           const neighbourhoodRatios = neighbourhoodPhotoCount.map((count, index) => {
             const ratio = count / neighbourhoodAreaList[index];
             return { name: neighbourhoodNamesList[index], ratio };
@@ -221,7 +220,7 @@ function initMap() {
           // Sort the array of objects by ratio in descending order
           neighbourhoodRatios.sort((a, b) => b.ratio - a.ratio);
           
-          // Create a list of the 5 most popular neighbourhood names
+          // Create a list of the 8 most popular neighbourhood names
           const popularNeighbourhoodNames = neighbourhoodRatios.slice(0, 8).map(neighbourhood => neighbourhood.name);
           
           // Update the HTML element with the list of popular neighbourhood names
@@ -303,7 +302,9 @@ function initMap() {
 
                 <ul class="neighbourhood-info">
                   <li><b>Neighbourhood name: </b>${item.name}</li>
+                  <br>
                   <li><b>Link: </b>${item.url}</li>
+                  <br>
                   <button onclick="openLightboxGallery()">View Photos</button>
                 </ul>
               </div>`
@@ -316,6 +317,7 @@ function initMap() {
               map: mapPhoto,
             })
 
+            //set polygon fill opacity
             let photoRatioCount = ratioList[index]
             newPolygon.setOptions({
               fillOpacity: Math.min(0.1 + (photoRatioCount / (maxPhotoCount)*1.4), 0.65),
@@ -324,6 +326,7 @@ function initMap() {
 
             index += 1;
 
+            //add listener to polygon on click
             google.maps.event.addListener(newPolygon, 'click', () => {
               neighbourhoodInfo.setContent(neighbourhoodInfoContent);
               neighbourhoodInfo.open(mapPhoto, centerMarker);
@@ -339,6 +342,7 @@ function initMap() {
               // mapPhoto.centerObject(newPolygon);
             });
 
+            // highlight polygon on mousoover
             google.maps.event.addListener(newPolygon, 'mouseover', () => {
               newPolygon.setOptions({
                 fillOpacity: 0.65,
@@ -349,10 +353,7 @@ function initMap() {
               newPolygon.setOptions({fillOpacity: Math.min(0.1 + (photoRatioCount / (maxPhotoCount)*1.4), 0.65)});
              });
             
-            
-          }
-
-           // displayNeighbourhoods()        
+          }  
 
         });
     

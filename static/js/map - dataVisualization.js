@@ -96,6 +96,46 @@ let night = document.getElementById('button-night')
 
 handleValuesSliderClick(night,'20', '24');
 
+function animateTimePeriods() {
+  console.log("animation clicked");
+
+  setTimeout(function() {
+    valuesSlider.noUiSlider.set(['5', '13'])
+    start_hour = '5';
+    finish_hour = '13';
+    console.log(start_hour, finish_hour);
+    renderData();
+  }, 0);
+
+  setTimeout(function() {
+    valuesSlider.noUiSlider.set(['13', '16'])
+    start_hour = '13';
+    finish_hour = '16';
+    console.log(start_hour, finish_hour);
+    renderData();
+  }, 4000);
+
+  setTimeout(function() {
+    valuesSlider.noUiSlider.set(['16', '20'])
+    start_hour = '16';
+    finish_hour = '20';
+    console.log(start_hour, finish_hour);
+    renderData()
+  }, 8000);
+
+  setTimeout(function() {
+    valuesSlider.noUiSlider.set(['20', '24'])
+    start_hour = '20';
+    finish_hour = '24';
+    console.log(start_hour, finish_hour);
+    renderData();
+  }, 12000);
+
+}
+
+let animation = document.getElementById('button-animation')
+animation.addEventListener('click', animateTimePeriods);
+
 
 // Filter the photos based on the time of day
 function get_photo_by_hour(start, end, photos_info) {
@@ -136,22 +176,22 @@ function renderData() {
         // radiusMaxPixels: 100,
         // lineWidthMinPixels: 1,
         getPosition: d => [d.longitude, d.latitude],
-        getRadius: 40,
-        getFillColor:  d => {
-          if (d.hour_taken < 13) {
-            return [255, 166, 0]; // Pink color
-          } else if (d.hour_taken < 18) {
-            return [239,86,117]; // Blue color
-          } else {
-            return [0,63,92]; // Blue color
-          }},
+        getRadius: 45,
         // getFillColor:  d => {
         //   if (d.hour_taken < 13) {
-        //     return [255, 0, 128]; // Pink color
+        //     return [255, 166, 0]; // Pink color
+        //   } else if (d.hour_taken < 18) {
+        //     return [239,86,117]; // Blue color
         //   } else {
-        //     return [0, 128, 255]; // Blue color
-        //   }
-        // },
+        //     return [0,63,92]; // Blue color
+        //   }},
+        getFillColor:  d => {
+          if (d.hour_taken < 16) {
+            return [255, 0, 128]; // Pink color
+          } else {
+            return [0, 128, 255]; // Blue color
+          }
+        },
         // getFillColor:  d => {
         //   if (d.hour_taken < 13) {
         //     return [255, 255, 0]; // Pink color
