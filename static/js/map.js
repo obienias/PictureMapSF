@@ -4,7 +4,7 @@
 let photos_info;
 let all_markers = [];
 let MarkerClusters = null;
-let mapPhoto; 
+let mapPhoto;
 let photoInfo;
 let neighbourhoods_info;
 let polygonList = []
@@ -36,30 +36,31 @@ let photosByBounds;
 let squarePhotoUrl;
 
 var valuesSlider = document.getElementById('values-slider');
-var valuesForSlider = [0,'1 AM','2 AM','3 AM','4 AM','5 AM','6 AM','7 AM','8 AM','9 AM','1 0AM', '11 AM' ,'12 PM','1 PM', '2 PM', '3 PM', '4 PM', '5 PM','6 PM', '7 PM','8 PM','9 PM','10 PM','11 PM', '12 AM']; 
+var valuesForSlider = [0, '1 AM', '2 AM', '3 AM', '4 AM', '5 AM', '6 AM', '7 AM', '8 AM', '9 AM', '1 0AM', '11 AM', '12 PM', '1 PM', '2 PM', '3 PM', '4 PM', '5 PM', '6 PM', '7 PM', '8 PM', '9 PM', '10 PM', '11 PM', '12 AM'];
 
 var format = {
-    to: function(value) {
-        return valuesForSlider[Math.round(value)];
-    },
-    from: function (value) {
-        return valuesForSlider.indexOf(Number(value));
-    }
+  to: function (value) {
+    return valuesForSlider[Math.round(value)];
+  },
+  from: function (value) {
+    return valuesForSlider.indexOf(Number(value));
+  }
 };
 
 noUiSlider.create(valuesSlider, {
-    start: [1, 24],
-    // A linear range from 0 to 15 (16 values)
-    range: { min: 0, max: valuesForSlider.length - 1 },
-    // steps of 1
-    step: 1,
-    tooltips: true,
-    // format: format,
-    pips: { mode: 'steps', 
+  start: [1, 24],
+  // A linear range from 0 to 15 (16 values)
+  range: { min: 0, max: valuesForSlider.length - 1 },
+  // steps of 1
+  step: 1,
+  tooltips: true,
+  // format: format,
+  pips: {
+    mode: 'steps',
     // format: format,
     density: 50,
 
-   },
+  },
 });
 
 // The display values can be used to control the slider
@@ -69,9 +70,9 @@ valuesSlider.addEventListener('click', function () {
   hoursList = valuesSlider.noUiSlider.get();
   start_hour = hoursList[0];
   finish_hour = hoursList[1];
-  console.log(start_hour,finish_hour)
+  console.log(start_hour, finish_hour)
   displayMarkers();
-  console.log(filtered_photos) 
+  console.log(filtered_photos)
 });
 
 function handleValuesSliderClick(Slider, start, end) {
@@ -90,21 +91,21 @@ let morning = document.getElementById('button-morning')
 handleValuesSliderClick(morning, '5', '12');
 let afternoon = document.getElementById('button-afternoon')
 
-handleValuesSliderClick(afternoon,'12', '17');
+handleValuesSliderClick(afternoon, '12', '17');
 let evening = document.getElementById('button-evening')
 
-handleValuesSliderClick(evening,'17', '21');
+handleValuesSliderClick(evening, '17', '21');
 let night = document.getElementById('button-night')
 
-handleValuesSliderClick(night,'21', '24');
+handleValuesSliderClick(night, '21', '24');
 
 
 
 // Filter the photos based on the time of day
 
-function filterPhotoBounds (filtered_photos, photosByBounds, mapBounds) {
+function filterPhotoBounds(filtered_photos, photosByBounds, mapBounds) {
   photosByBounds = []
-  for (const photo of filtered_photos ) {
+  for (const photo of filtered_photos) {
     if (photo.author_name !== "anthonynachor") {
       let photoLocation = {
         lat: photo.latitude,
@@ -113,9 +114,9 @@ function filterPhotoBounds (filtered_photos, photosByBounds, mapBounds) {
       if (mapBounds.contains(photoLocation)) {
         photosByBounds.push(photo)
       }
-    }   
     }
-    
+  }
+
   return photosByBounds;
 };
 
@@ -203,19 +204,20 @@ function displayMarkers() {
     const photoInfoContent = `
     <div class="window-content">
       <div class="photo-thumbnail">
-        <img
+      <a href=${photo.photo_url_main}><img
           src=${photo.photo_url2}
           alt="photo-thumbnail"
         />
+      </a>
       </div>
 
-      <ul class="photo-info">
-        <li><b>Photo title: </b>${photo.title}</li>
-        <li><b>Author name: </b>${photo.author_name}</li>
-        <li><b>Date: </b>${photo.time_taken}</li>
-      </ul>
-    </div>`
 
+    </div>`
+    //      <ul class="photo-info">
+    // <li><b>Photo title: </b>${photo.title}</li>
+    // <li><b>Author name: </b>${photo.author_name}</li>
+    // <li><b>Date: </b>${photo.time_taken}</li>
+    // </ul>
 
     const photoMarker = new google.maps.Marker({
       position: {
@@ -242,53 +244,49 @@ function displayMarkers() {
       photoInfo.open(map, photoMarker);
     });
 
-    
+
   }
 
-    countTotal = all_markers.length
-    // const maxDim= 200;
-    // const minDim = 30;
-    // const k = 5;
-    // const x = 0.35;
+  countTotal = all_markers.length
 
 
-    const renderer = {
+  const renderer = {
     render: ({ count, position }, stats) =>
 
       new google.maps.Marker({
-      label: { text: String(count), color: "#FFFFFF", fontSize: "12px", fontWeight: "600" },
-      // icon: {
-      //     url: '/static/img/m1.png',
-      //     // scaledSize: new google.maps.Size(((maxDim - minDim) / (1 + Math.exp(-k*(count/stats.clusters.markers.max - x))) + minDim),((maxDim - minDim) / (1 + Math.exp(-k*(count/stats.clusters.markers.max - x))) + minDim)),
-      //     scaledSize: new google.maps.Size((40+(count/stats.clusters.markers.max)*50),(40+(count/stats.clusters.markers.max)*50))
-      //   },
-      icon: {
-        path: google.maps.SymbolPath.CIRCLE,
-        scale: (15+(count/stats.clusters.markers.max)*35),
-        fillColor: "#246F81",
-        //246F81, 56d4ee, 04bceb, 244047, e57f84, 246F81, 6592A0
-        fillOpacity: 0.5,
-        strokeWeight: 0
-      },
-      position,
-      // adjust zIndex to be above other markers
-      zIndex: Number(google.maps.Marker.MAX_ZINDEX) + count,
+        label: { text: String(count), color: "#FFFFFF", fontSize: "12px", fontWeight: "600" },
+        // icon: {
+        //     url: '/static/img/m1.png',
+        //     // scaledSize: new google.maps.Size(((maxDim - minDim) / (1 + Math.exp(-k*(count/stats.clusters.markers.max - x))) + minDim),((maxDim - minDim) / (1 + Math.exp(-k*(count/stats.clusters.markers.max - x))) + minDim)),
+        //     scaledSize: new google.maps.Size((40+(count/stats.clusters.markers.max)*50),(40+(count/stats.clusters.markers.max)*50))
+        //   },
+        icon: {
+          path: google.maps.SymbolPath.CIRCLE,
+          scale: (15 + (count / stats.clusters.markers.max) * 35),
+          fillColor: "#246F81",
+          //246F81, 56d4ee, 04bceb, 244047, e57f84, 246F81, 6592A0
+          fillOpacity: 0.5,
+          strokeWeight: 0
+        },
+        position,
+        // adjust zIndex to be above other markers
+        zIndex: Number(google.maps.Marker.MAX_ZINDEX) + count,
       })
 
-    };
+  };
 
-    // const algorithm = new gridAlgorithm.GridAlgorithm({
-    //   gridSize: 60
-    // });
+  // const algorithm = new gridAlgorithm.GridAlgorithm({
+  //   gridSize: 60
+  // });
 
-    MarkerClusters = new markerClusterer.MarkerClusterer({ map: mapPhoto, markers: all_markers, renderer});
+  MarkerClusters = new markerClusterer.MarkerClusterer({ map: mapPhoto, markers: all_markers, renderer });
 
 }
 
 function generateGalleryHTML(images) {
   const items = images.map(image => `
     <a href="${image.photo_url2}" data-fancybox="gallery" data-caption="Image caption">
-      <img src="${squarePhotoUrl= image.photo_url2.replace("_b.","_q.")}" />
+      <img src="${squarePhotoUrl = image.photo_url2.replace("_b.", "_q.")}" />
     </a>
   `);
   const html = `
@@ -300,7 +298,7 @@ function generateGalleryHTML(images) {
 }
 
 function initMap() {
-  
+
   //create map first, get bounds, get
 
   fetch('/api/markers')
@@ -311,20 +309,20 @@ function initMap() {
 
       photoInfo = new google.maps.InfoWindow();
       photoList = photos_info;
-     
+
       displayMarkers();
       mapPhoto.addListener('idle', () => {
 
         mapBounds = mapPhoto.getBounds();
         console.log(mapBounds);
-    
+
         let photos = filterPhotoBounds(filtered_photos, photosByBounds, mapBounds);
         photoList = photos;
-    
+
         const randomImages = getRandomPhotos(18);
         const galleryHTML = generateGalleryHTML(randomImages);
         document.querySelector("#gallery").innerHTML = galleryHTML;
-        
+
         //filter markers by location
       });
 
@@ -334,7 +332,7 @@ function initMap() {
       // const randomImages = getRandomPhotos(18);
       // const galleryHTML = generateGalleryHTML(randomImages);
       // document.querySelector("#gallery").innerHTML = galleryHTML;
-           
+
     });
 
   mapPhoto = new google.maps.Map(document.querySelector('#map'), {
@@ -355,7 +353,7 @@ function initMap() {
   //   const randomImages = getRandomPhotos(18);
   //   const galleryHTML = generateGalleryHTML(randomImages);
   //   document.querySelector("#gallery").innerHTML = galleryHTML;
-    
+
   //   //filter markers by location
   // });
 

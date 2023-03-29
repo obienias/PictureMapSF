@@ -4,7 +4,7 @@
 let photos_info;
 let all_markers = [];
 let MarkerClusters = null;
-let mapPhoto; 
+let mapPhoto;
 let photoInfo;
 let neighbourhoods_info;
 let polygonList = []
@@ -26,6 +26,7 @@ let neighbourhoodAreaList = [0.4717220034755423, 0.392662061532891, 6.2823291775
 let ratioList = [];
 let photoCount;
 let photoList;
+let squarePhotoUrl;
 
 
 //calculate ration of neighbourhood area to photo count
@@ -37,100 +38,45 @@ for (let i = 0; i < neighbourhoodPhotoCount.length; i++) {
 let maxPhotoCount = Math.max(...ratioList)
 
 
-// //function to generate dropdown menu for each hour
-// function generateDropdownHour(elemnent_id) {
-
-//   const select = document.getElementById(elemnent_id);
-
-//   for (var i = 0; i <= 23; i++) {
-//     var option = document.createElement("option");
-//     option.text = i + ":00";
-//     option.value = i;
-//     select.add(option);
-//   }
-// }
-
-// generateDropdownHour("time_start_dropdown")
-// generateDropdownHour("time_end_dropdown")
-
-// const start_dropdown = document.querySelector("#time_start_dropdown");
-// const finish_dropdown = document.querySelector("#time_end_dropdown");
-
-// start_hour = 0;
-// finish_hour = 0;
-
-// start_dropdown.addEventListener('change', () => {
-//   start_hour = start_dropdown.value;
-//   console.log("start hour: " + start_hour);
-//   displayMarkers();
-// });
-
-// finish_dropdown.addEventListener('change', () => {
-//   finish_hour = finish_dropdown.value;
-//   console.log("finish hour: " + finish_hour);
-//   displayMarkers();
-// });
-
-// // Filter the photos based on the time of day
-// function get_photo_by_hour(start, end, photos_info) {
-//   let filtered_photos = [];
-//   if (start === 0 || end === 0) {
-//     return photos_info;
-//   }
-//   for (let photo of photos_info) {
-//     if (photo.hour_taken >= start && photo.hour_taken < end) {
-//       filtered_photos.push(photo)
-
-//     }
-//   }
-//   return filtered_photos
-// }
-
-// function deleteMarkers() {
-
-//   for (const marker of all_markers) {
-//     marker.setMap(null)
-//   }
-//   all_markers = [];
-
-// };
-
-
-
-// function displayNeighbourhoods() {
-
-// }
-
-
-// const select = document.getElementById(elemnent_id)
-
-
-function filterPhotoNeighbourhood (filtered_photos, photosByNeighbourhood, newPolygon) {
+function filterPhotoNeighbourhood(photos_info, photosByNeighbourhood, newPolygon) {
   photosByNeighbourhood = []
-  for (const photo of filtered_photos) {
-    let photoLocation = {
-      lat: photo.latitude,
-      lng: photo.longitude,
+  for (const photo of photos_info) {
+    if (photo.author_name !== "anthonynachor") {
+      let photoLocation = {
+        lat: photo.latitude,
+        lng: photo.longitude,
+      }
+      if (google.maps.geometry.poly.containsLocation(photoLocation, newPolygon)) {
+        photosByNeighbourhood.push(photo)
+      }
     }
-    if (google.maps.geometry.poly.containsLocation(photoLocation, newPolygon)) {
-      photosByNeighbourhood.push(photo)
-    }
-  }   
-  console.log (photosByNeighbourhood)
+  }
+  console.log(photosByNeighbourhood)
   return photosByNeighbourhood;
 }
 
 function getRandomPhotos(numPhotos) {
   let randomPhotos = [];
+  let indicesList = [];
   let maxIndex = photoList.length - 1;
 
-  for (let i = 0; i < numPhotos; i++) {
-    let randomIndex = Math.floor(Math.random() * maxIndex);
-    randomPhotos.push(photoList[randomIndex]);
+  if (numPhotos > photoList.length) {
+    numPhotos = photoList.length;
   }
-  console.log(randomPhotos);
-  return randomPhotos;
 
+  for (let i = 0; i < numPhotos; i++) {
+    let randomIndex;
+    do {
+      randomIndex = Math.floor(Math.random() * maxIndex);
+    } while (indicesList.includes(randomIndex) && indicesList.length < maxIndex);
+
+    randomPhotos.push(photoList[randomIndex]);
+    indicesList.push(randomIndex);
+  }
+
+  console.log(randomPhotos);
+  console.log(indicesList);
+  return randomPhotos;
 }
 
 function displayLightboxGallery(photos) {
@@ -152,7 +98,7 @@ function displayLightboxGallery(photos) {
     thumb: photo.photo_url2,
     caption: photo.title
   }));
-  
+
   // display the lightbox
   new Fancybox(
     fancyboxItems,
@@ -163,24 +109,36 @@ function displayLightboxGallery(photos) {
 
 }
 
+
 function openLightboxGallery() {
   let numPhotos = 20; // specify the number of photos to display
   let randomPhotos = getRandomPhotos(numPhotos);
   displayLightboxGallery(randomPhotos);
 }
 
+
+function generateGalleryHTML(images) {
+  const items = images.map(image => `
+    <a href="${image.photo_url2}" data-fancybox="gallery" data-caption="Image caption">
+      <img src="${squarePhotoUrl = image.photo_url2.replace("_b.", "_q.")}" />
+    </a>
+  `);
+  const html = `
+    <div class="grid">
+      ${items.join("")}
+    </div>
+  `;
+  return html;
+}
+
 function initMap() {
-  
+
 
   fetch('/api/markers')
     .then((response) => response.json())
     .then((responseData) => {
 
       photos_info = responseData;
-      // filtered_photos = get_photo_by_hour(start_hour, finish_hour, photos_info);
-      // let photoCountTotal = filtered_photos.length;
-      // console.log (photoCountTotal);
-      
 
 
       fetch('/api/neighbourhoods')
@@ -189,21 +147,20 @@ function initMap() {
 
           neighbourhoods_info = responseData2;
           // console.log(neighbourhoods_info);
-          
+
           //creates one instance of info window for neighbourhoods
           neighbourhoodInfo = new google.maps.InfoWindow();
 
           //defines bounding box for polygons (non-native in google maps API)
-          google.maps.Polygon.prototype.getBoundingBox = function() {
+          google.maps.Polygon.prototype.getBoundingBox = function () {
             var bounds = new google.maps.LatLngBounds();
-          
-            this.getPath().forEach(function(element,index) {
+
+            this.getPath().forEach(function (element, index) {
               bounds.extend(element)
             });
-            return(bounds);
+            return (bounds);
           };
 
-          
           // list od neighbourhood names
           let neighbourhoodNamesList = [];
           for (const item of neighbourhoods_info) {
@@ -216,13 +173,13 @@ function initMap() {
             const ratio = count / neighbourhoodAreaList[index];
             return { name: neighbourhoodNamesList[index], ratio };
           });
-          
+
           // Sort the array of objects by ratio in descending order
           neighbourhoodRatios.sort((a, b) => b.ratio - a.ratio);
-          
+
           // Create a list of the 8 most popular neighbourhood names
           const popularNeighbourhoodNames = neighbourhoodRatios.slice(0, 8).map(neighbourhood => neighbourhood.name);
-          
+
           // Update the HTML element with the list of popular neighbourhood names
           const neighbourhoodListElement = document.querySelector('#neighbourhood_list');
           neighbourhoodListElement.innerHTML = `<ul><li>${popularNeighbourhoodNames.join('</li><li>')}</li></ul>`;
@@ -230,10 +187,10 @@ function initMap() {
           // neighbourhoodListElement.querySelectorAll('li').forEach((listItem) => {
           //   // get the name of the neighbourhood from the list item
           //   const neighbourhoodName = listItem.textContent;
-          
+
           //   // find the polygon on the map with the same title as the neighbourhood
           //   const neighbourhoodPolygon = polygonList.find((polygon) => polygon.getTitle() === neighbourhoodName);
-          
+
           //   // add click event listener to the list item
           //   listItem.addEventListener('click', () => {
           //     // open the info window for the neighbourhood polygon
@@ -260,7 +217,7 @@ function initMap() {
           //     if (polygon) {
           //       const neighbourhoodInfoContent = `
           //         <div class="window-content">
-          
+
           //           <ul class="neighbourhood-info">
           //             <li><b>Neighbourhood name: </b>${polygon.title}</li>
           //             <li><b>Link: </b>${item.url2}</li>
@@ -277,7 +234,7 @@ function initMap() {
 
           //creates polygins for each neighbourhood  4079829929
           for (const item of neighbourhoods_info) {
-            let coords =  JSON.parse(item.coordinates);
+            let coords = JSON.parse(item.coordinates);
             const newPolygon = new google.maps.Polygon({
               title: item.name,
               paths: coords,
@@ -320,9 +277,8 @@ function initMap() {
             //set polygon fill opacity
             let photoRatioCount = ratioList[index]
             newPolygon.setOptions({
-              fillOpacity: Math.min(0.1 + (photoRatioCount / (maxPhotoCount)*1.4), 0.65),
+              fillOpacity: Math.min(0.1 + (photoRatioCount / (maxPhotoCount) * 1.4), 0.65),
             });
-
 
             index += 1;
 
@@ -331,9 +287,13 @@ function initMap() {
               neighbourhoodInfo.setContent(neighbourhoodInfoContent);
               neighbourhoodInfo.open(mapPhoto, centerMarker);
               console.log(item.name)
-              let photos = filterPhotoNeighbourhood (photos_info, photosByNeighbourhood, newPolygon);
+              let photos = filterPhotoNeighbourhood(photos_info, photosByNeighbourhood, newPolygon);
 
               photoList = photos;
+
+              const randomImages = getRandomPhotos(18);
+              const galleryHTML = generateGalleryHTML(randomImages);
+              document.querySelector("#gallery").innerHTML = galleryHTML;
 
               // let numPhotos = 20; // specify the number of photos to display
               // let randomPhotos = getRandomPhotos(numPhotos);
@@ -349,14 +309,14 @@ function initMap() {
               });
             });
 
-            google.maps.event.addListener(newPolygon,"mouseout", () => {
-              newPolygon.setOptions({fillOpacity: Math.min(0.1 + (photoRatioCount / (maxPhotoCount)*1.4), 0.65)});
-             });
-            
-          }  
+            google.maps.event.addListener(newPolygon, "mouseout", () => {
+              newPolygon.setOptions({ fillOpacity: Math.min(0.1 + (photoRatioCount / (maxPhotoCount) * 1.4), 0.65) });
+            });
+
+          }
 
         });
-    
+
 
     });
 
