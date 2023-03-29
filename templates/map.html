@@ -1,86 +1,149 @@
 {% extends 'base.html' %}
 
 {% block head %}
-  <link rel="stylesheet" href="/static/css/maps.css"/>
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/noUiSlider/15.7.0/nouislider.min.css" />
-  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
-  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/ui@5.0/dist/fancybox/fancybox.css"/>
-  <script src="https://d3js.org/d3.v7.min.js"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/noUiSlider/15.7.0/nouislider.min.js"></script>
-  <!-- /* Override default noUiSlider width */ -->
-  <style>
-    .noUi-base .noUi-connects{
-      width: 50%
-    }
-    #slider-fit {
-    padding: 0 16px;
-}
-    #values-slider {
-      width:30%;
-      display: block;
-    }
+<link rel="stylesheet" href="/static/css/maps.css" />
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/noUiSlider/15.7.0/nouislider.min.css" />
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/css/bootstrap.min.css"
+  integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/ui@5.0/dist/fancybox/fancybox.css" />
+<script src="https://d3js.org/d3.v7.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/noUiSlider/15.7.0/nouislider.min.js"></script>
+<!-- /* Override default noUiSlider width */ -->
+<style>
+  /* .noUi-base .noUi-connect {
+    width: 100%
+  } */
 
-    .grid {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  grid-auto-rows: 1fr;
-  gap: flex;
-  align-content: start;
-  padding: 10px;
-}
+  #slider-fit {
+    padding: 0;
+  }
 
-.grid img {
-  display: block; 
-  margin: auto;
-  width: 100%;
-  height: 100%;
-}
+  #values-slider {
+    width: 100%;
+    display: block;
+    height: 10px;
+  }
 
-.map-and-gallery-container {
-  display: flex;
-  flex-wrap: wrap;
-  width: 100%;
-  height: 80%;
-  margin: 25px 25px 25px 25px;
-}
+  .noUi-connect {
+    background: #3383d4;
+  }
 
-.map {
-  padding: 10px;
-  width: 70%;
-  height: 100%;
-}
+  #values-slider .noUi-handle {
+    height: 18px;
+    width: 18px;
+    top: -5px;
+    right: -9px;
+    /* half the width */
+    border-radius: 9px;
+  }
 
-#map {
-  width: 100%;
-  height: 100%;
-  
-}
+  .grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    grid-auto-rows: 1fr;
+    gap: 10px;
+    align-content: start;
+    padding: 10px;
+  }
 
-#gallery {
-  width: 30%;
-  height: 100%;
-  display: flex;
-}
-  </style>
+  .grid img {
+    display: block;
+    margin: auto;
+    width: 100%;
+    height: 100%;
+  }
+
+  .map-and-gallery-container {
+    display: flex;
+    flex-wrap: wrap;
+    width: 100%;
+    height: 80%;
+    margin: 25px 25px 25px 25px;
+  }
+
+  /* body {
+  background-color: #f5f2f3f8;
+} */
+
+  .map {
+    padding: 10px;
+    width: 66%;
+    height: 100%;
+  }
+
+  #map {
+    width: 100%;
+    height: 100%;
+
+  }
+
+  #gallery {
+    width: 34%;
+    height: 100%;
+    display: flex;
+  }
+
+  .nav-link {
+    color: white;
+  }
+
+  .btn-secondary {
+    /* background: #936969; 93a8ae 588A97*/
+    background: #3AB1CF;
+  }
+</style>
 
 {% endblock %}
 
 {% block body %}
-<h1>Welcome to SF PhotoMap!</h1>
-<nav>
-  <br>
-  <br>
-  <div id="values-slider">
-  </div>
-  <br>
-  <br>
-  <div class="btn-group" role="group" aria-label="Basic example">
-    <button type="button" class="btn btn-secondary" id="button-morning">Morning</button>
-    <button type="button" class="btn btn-secondary" id="button-afternoon">Afternoon</button>
-    <button type="button" class="btn btn-secondary" id="button-evening">Evening</button>
-    <button type="button" class="btn btn-secondary" id="button-night">Night</button>
+
+<nav class="navbar navbar-expand-lg bg-body-tertiary" style="background-color: #93a8ae">
+  <div class="container-fluid">
+    <a class="navbar-brand" href="#">SF PhotoMap</a>
+    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavAltMarkup"
+      aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
+      <div class="navbar-nav">
+        <a class="nav-link" href="#" style="color: #ffffff;">Home</a>
+        <a class="nav-link active" aria-current="page" href="#">Map 1</a>
+        <a class="nav-link" href="#">Map 2</a>
+        <a class="nav-link" href="#">Map 3</a>
+      </div>
+    </div>
+
   </div>
 </nav>
+
+
+<section class="py-5 text-center container"
+  style="background-color: #fffffff8; padding: 20px; margin: 0px 400px 0px 400px">
+  <!-- <div class="row py-lg-5"> -->
+  <div class="col-lg-6 col-md-8 mx-auto">
+    <h1 class="fw-light">Explore San Francisco through images</h1>
+    <p class="lead text-body-secondary">Zoom in and out through the map to see discover photos. Select time of day for photos you want to see.</p>
+    <p>
+    <div class="btn-group" role="group" aria-label="Basic example">
+      <button type="button" class="btn btn-secondary my-2" id="button-morning">Morning</button>
+      <button type="button" class="btn btn-secondary my-2" id="button-afternoon">Afternoon</button>
+      <button type="button" class="btn btn-secondary my-2" id="button-evening">Evening</button>
+      <button type="button" class="btn btn-secondary my-2" id="button-night">Night</button>
+    </div>
+    </p>
+    <br>
+    <br>
+
+  </div>
+  <!-- </div> -->
+  <div class="overflow-hidden" style="max-height: 30vh;">
+    <div class="container px-5">
+      <div class="slider-styled" id="values-slider"></div>
+    </div>
+  </div>
+</section>
+
+
 
 <div class="map-and-gallery-container">
   <section class="map">
@@ -90,17 +153,13 @@
   <div id="gallery"></div>
 </div>
 
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/noUiSlider/15.7.0/nouislider.min.js"></script>
-  <script 
-    src="/static/js/mapStyles.js"></script>
-  <script src="/static/js/map.js"></script>
-  <script
-    async
-    src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBD6npB1SOMfDAjoVYfM1t3xEwq3XPRCXM&libraries=geometry&callback=initMap">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/noUiSlider/15.7.0/nouislider.min.js"></script>
+<script src="/static/js/mapStyles.js"></script>
+<script src="/static/js/map.js"></script>
+<script async
+  src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBD6npB1SOMfDAjoVYfM1t3xEwq3XPRCXM&libraries=geometry&callback=initMap">
   </script>
-  <script 
-  async
-  src="https://unpkg.com/@googlemaps/markerclusterer/dist/index.min.js"></script>
-  <script src="https://cdn.jsdelivr.net/npm/@fancyapps/ui@5.0/dist/fancybox/fancybox.umd.js"></script>
-    
+<script async src="https://unpkg.com/@googlemaps/markerclusterer/dist/index.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@fancyapps/ui@5.0/dist/fancybox/fancybox.umd.js"></script>
+
 {% endblock %}

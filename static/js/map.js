@@ -36,20 +36,19 @@ let photosByBounds;
 let squarePhotoUrl;
 
 var valuesSlider = document.getElementById('values-slider');
-var valuesForSlider = [0, '1 AM', '2 AM', '3 AM', '4 AM', '5 AM', '6 AM', '7 AM', '8 AM', '9 AM', '1 0AM', '11 AM', '12 PM', '1 PM', '2 PM', '3 PM', '4 PM', '5 PM', '6 PM', '7 PM', '8 PM', '9 PM', '10 PM', '11 PM', '12 AM'];
+var valuesForSlider = [0, '1 AM', '2 AM', '3 AM', '4 AM', '5 AM', '6 AM', '7 AM', '8 AM', '9 AM', '10 AM', '11 AM', '12 PM', '1 PM', '2 PM', '3 PM', '4 PM', '5 PM', '6 PM', '7 PM', '8 PM', '9 PM', '10 PM', '11 PM', '12 AM'];
 
 var format = {
   to: function (value) {
     return valuesForSlider[Math.round(value)];
   },
   from: function (value) {
-    return valuesForSlider.indexOf(Number(value));
+    return valuesForSlider.indexOf(value);
   }
 };
 
 noUiSlider.create(valuesSlider, {
-  start: [1, 24],
-  // A linear range from 0 to 15 (16 values)
+  start: ['1 AM', '11 PM'],
   range: { min: 0, max: valuesForSlider.length - 1 },
   // steps of 1
   step: 1,
@@ -57,7 +56,7 @@ noUiSlider.create(valuesSlider, {
   // format: format,
   pips: {
     mode: 'steps',
-    // format: format,
+    format: format,
     density: 50,
 
   },
@@ -120,21 +119,6 @@ function filterPhotoBounds(filtered_photos, photosByBounds, mapBounds) {
   return photosByBounds;
 };
 
-// function getRandomPhotos(numPhotos) {
-//   let randomPhotos = [];
-//   let indicesList = [];
-//   let maxIndex = photoList.length - 1;
-
-//   for (let i = 0; i < numPhotos; i++) {
-//     let randomIndex = Math.floor(Math.random() * maxIndex);
-//     randomPhotos.push(photoList[randomIndex]);
-//     indicesList.push(randomIndex);
-//   }
-//   console.log(randomPhotos);
-//   console.log(indicesList);
-//   return randomPhotos;
-
-// }
 
 
 function getRandomPhotos(numPhotos) {
@@ -210,8 +194,6 @@ function displayMarkers() {
         />
       </a>
       </div>
-
-
     </div>`
     //      <ul class="photo-info">
     // <li><b>Photo title: </b>${photo.title}</li>
@@ -323,15 +305,8 @@ function initMap() {
         const galleryHTML = generateGalleryHTML(randomImages);
         document.querySelector("#gallery").innerHTML = galleryHTML;
 
-        //filter markers by location
       });
-
-      // let photos = filterPhotoNeighbourhood (photos_info, photosByNeighbourhood, newPolygon);
-      // photoList = photos;
-
-      // const randomImages = getRandomPhotos(18);
-      // const galleryHTML = generateGalleryHTML(randomImages);
-      // document.querySelector("#gallery").innerHTML = galleryHTML;
+  
 
     });
 
@@ -342,20 +317,7 @@ function initMap() {
     mapTypeControl: false,
     streetViewControl: false,
   });
-  // mapPhoto.addListener('idle', () => {
 
-  //   mapBounds = mapPhoto.getBounds();
-  //   console.log(mapBounds);
-
-  //   let photos = filterPhotoBounds(photoList, photosByBounds, mapBounds);
-  //   photoList = photos;
-
-  //   const randomImages = getRandomPhotos(18);
-  //   const galleryHTML = generateGalleryHTML(randomImages);
-  //   document.querySelector("#gallery").innerHTML = galleryHTML;
-
-  //   //filter markers by location
-  // });
 
 
 }
