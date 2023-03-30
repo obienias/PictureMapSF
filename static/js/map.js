@@ -74,8 +74,8 @@ valuesSlider.addEventListener('click', function () {
   console.log(filtered_photos)
 });
 
-function handleValuesSliderClick(Slider, start, end) {
-  Slider.addEventListener('click', function () {
+function handleValuesSliderClick(button, start, end) {
+  button.addEventListener('click', function () {
     console.log("button clicked")
     valuesSlider.noUiSlider.set([start, end])
     start_hour = start;
@@ -119,8 +119,6 @@ function filterPhotoBounds(filtered_photos, photosByBounds, mapBounds) {
   return photosByBounds;
 };
 
-
-
 function getRandomPhotos(numPhotos) {
   let randomPhotos = [];
   let indicesList = [];
@@ -143,7 +141,7 @@ function getRandomPhotos(numPhotos) {
   console.log(randomPhotos);
   console.log(indicesList);
   return randomPhotos;
-}
+};
 
 function get_photo_by_hour(start, end, photos_info) {
   let filtered_photos = [];
@@ -157,7 +155,7 @@ function get_photo_by_hour(start, end, photos_info) {
     }
   }
   return filtered_photos
-}
+};
 
 function deleteMarkers() {
 
@@ -231,7 +229,6 @@ function displayMarkers() {
 
   countTotal = all_markers.length
 
-
   const renderer = {
     render: ({ count, position }, stats) =>
 
@@ -257,9 +254,6 @@ function displayMarkers() {
 
   };
 
-  // const algorithm = new gridAlgorithm.GridAlgorithm({
-  //   gridSize: 60
-  // });
 
   MarkerClusters = new markerClusterer.MarkerClusterer({ map: mapPhoto, markers: all_markers, renderer });
 
@@ -293,7 +287,8 @@ function initMap() {
       photoList = photos_info;
 
       displayMarkers();
-      mapPhoto.addListener('idle', () => {
+
+      const refreshGallery = () => {
 
         mapBounds = mapPhoto.getBounds();
         console.log(mapBounds);
@@ -305,8 +300,17 @@ function initMap() {
         const galleryHTML = generateGalleryHTML(randomImages);
         document.querySelector("#gallery").innerHTML = galleryHTML;
 
-      });
-  
+      }
+      refreshGallery();
+
+      //listener for change bounds of map
+      mapPhoto.addListener('idle', refreshGallery);
+      // Query for all the time buttons
+      // Add refreshGallery as a 'click' listener for all of them
+      morning.addEventListener('click', refreshGallery);
+      afternoon.addEventListener('click', refreshGallery);
+      evening.addEventListener('click', refreshGallery);
+      night.addEventListener('click', refreshGallery);
 
     });
 
