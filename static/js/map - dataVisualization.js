@@ -34,30 +34,48 @@ start_hour = 3;
 finish_hour = 21;
 
 var valuesSlider = document.getElementById('values-slider');
-var valuesForSlider = [0,'1 AM','2AM','3AM','4AM','5AM','6AM',7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24]; 
+var valuesForSlider = [0, '1 AM', '2 AM', '3 AM', '4 AM', '5 AM', '6 AM', '7 AM', '8 AM', '9 AM', '10 AM', '11 AM', '12 PM', '1 PM', '2 PM', '3 PM', '4 PM', '5 PM', '6 PM', '7 PM', '8 PM', '9 PM', '10 PM', '11 PM', '12 AM'];
 
 var format = {
-    to: function(value) {
-        return valuesForSlider[Math.round(value)];
-    },
-    from: function (value) {
-        return valuesForSlider.indexOf(Number(value));
-    }
+  to: function (value) {
+    return valuesForSlider[Math.round(value)];
+  },
+  from: function (value) {
+    return valuesForSlider.indexOf(value);
+  }
 };
 
-noUiSlider.create(valuesSlider, {
-    start: [1, 24],
-    // A linear range from 0 to 15 (16 values)
-    range: { min: 0, max: valuesForSlider.length - 1 },
-    // steps of 1
-    step: 1,
-    tooltips: true,
-    // format: format,
-    pips: { mode: 'steps', 
-    // format: format,
-    density: 50,
+function filterPips(value, type) {
+  if (type === 0) {
+    return value < 2000 ? -1 : 0;
+  }
+  if (value % 2 === 0) {
+    return 1; // large pip
+  }
+  return 0; // small pip
+}
 
-   },
+noUiSlider.create(valuesSlider, {
+  start: ['1 AM', '11 PM'],
+  range: { min: 0, max: valuesForSlider.length - 1 },
+  // steps of 1
+  step: 1,
+  tooltips: false,
+  connect: true,
+  // format: format,
+  pips: {
+    mode: 'steps',
+    format: format,
+    filter: filterPips,
+    // density: 50,
+    // values:4
+    classes: {
+      // class for small pip
+      '0': 'noUi-small-pip',
+      // class for large pip
+      '1': 'noUi-large-pip'
+    }
+  },
 });
 
 // The display values can be used to control the slider
@@ -113,7 +131,7 @@ function animateTimePeriods() {
     finish_hour = '16';
     console.log(start_hour, finish_hour);
     renderData();
-  }, 4000);
+  }, 2000);
 
   setTimeout(function() {
     valuesSlider.noUiSlider.set(['16', '20'])
@@ -121,7 +139,7 @@ function animateTimePeriods() {
     finish_hour = '20';
     console.log(start_hour, finish_hour);
     renderData()
-  }, 8000);
+  }, 4000);
 
   setTimeout(function() {
     valuesSlider.noUiSlider.set(['20', '24'])
@@ -129,7 +147,7 @@ function animateTimePeriods() {
     finish_hour = '24';
     console.log(start_hour, finish_hour);
     renderData();
-  }, 12000);
+  }, 6000);
 
 }
 
@@ -220,30 +238,30 @@ function renderData() {
       }),
     ],
   });
-    let props = {
-      getTooltip: ({object}) => object && { 
-        html:`  <div>
-              <div class="photo-thumbnail">
-              <img
-                src=${object.photo_url2}
-                alt="photo-thumbnail"
-              />
-            </div>
-            <div><b>Title:</b> ${object.title}</div>
-            <div><b>Author:</b> ${object.author_name}</div>
-          </div>`,
+    // let props = {
+    //   getTooltip: ({object}) => object && { 
+    //     html:`  <div>
+    //           <div class="photo-thumbnail">
+    //           <img
+    //             src=${object.photo_url2}
+    //             alt="photo-thumbnail"
+    //           />
+    //         </div>
+    //         <div><b>Title:</b> ${object.title}</div>
+    //         <div><b>Author:</b> ${object.author_name}</div>
+    //       </div>`,
 
-          style: {
-            backgroundColor: '#fff',
-            color: '#333359',
-            fontSize: '0.8em',
-            borderRadius: '6px',
-            padding: '0px 10px 10px 10px'
-          }
-      }
-    };
+    //       style: {
+    //         backgroundColor: '#fff',
+    //         color: '#333359',
+    //         fontSize: '0.8em',
+    //         borderRadius: '6px',
+    //         padding: '0px 10px 10px 10px'
+    //       }
+    //   }
+    // };
     deckOverlay.setMap(mapPhoto);
-    deckOverlay.setProps(props)
+    // deckOverlay.setProps(props)
 }
 
 
@@ -255,6 +273,7 @@ function initMap() {
     .then((responseData) => {
 
       photos_info = responseData;
+      document.getElementsByClassName('progress')[0].remove();
       renderData();
 
     });

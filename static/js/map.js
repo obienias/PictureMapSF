@@ -316,6 +316,8 @@ function initMap() {
       photoInfo = new google.maps.InfoWindow();
       photoList = photos_info;
 
+      document.getElementsByClassName('progress')[0].remove();
+
       displayMarkers();
 
       const refreshGallery = () => {

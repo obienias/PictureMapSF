@@ -10,7 +10,7 @@
   <script src="https://unpkg.com/@deck.gl/google-maps@8.7.3/dist.min.js"></script>
   <!-- /* Override default noUiSlider width */ -->
   <style>
-  #slider-fit {
+   #slider-fit {
     padding: 0;
   }
 
@@ -21,7 +21,27 @@
   }
 
   .noUi-connect {
-    background: #3383d4;
+    background: #b5cce3;
+  }
+
+  
+
+  #values-slider .noUi-handle {
+    height: 18px;
+    width: 18px;
+    top: -5px;
+    right: -9px;
+    /* half the width */
+    border-radius: 9px;
+    /* background: #657483; */
+  }
+
+  .noUi-small-pip {
+    font-size: 16px;
+  }
+
+  .noUi-large-pip {
+    font-size: 20px;
   }
 
   #values-slider .noUi-handle {
@@ -87,6 +107,14 @@
     /* background: #936969; 93a8ae 588A97*/
     background: #3AB1CF;
   }
+
+  .progress-bar {
+    background-color: #3AB1CF;
+    margin: 10 px;
+  }
+  .progress{
+    padding: 20 px;
+  }
   </style>
 
 {% endblock %}
@@ -127,8 +155,12 @@
       <button type="button" class="btn btn-secondary my-2"" id="button-animation">start</button>
     </div>
     </p>
-    <br>
-    <br>
+    <div style="padding: 40px;">
+      <div class="progress" role="progressbar" aria-label="Animated striped example" aria-valuenow="75" aria-valuemin="0" aria-valuemax="100">
+        <div class="progress-bar progress-bar-striped progress-bar-animated" style="width: 75%"></div>
+      </div>
+    </div>
+  
 
   </div>
   <!-- </div> -->
