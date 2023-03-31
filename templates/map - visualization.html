@@ -10,22 +10,136 @@
   <script src="https://unpkg.com/@deck.gl/google-maps@8.7.3/dist.min.js"></script>
   <!-- /* Override default noUiSlider width */ -->
   <style>
-    .noUi-base .noUi-connects{
-      width: 50%
-    }
-    #slider-fit {
-    padding: 0 16px;
-}
-    #values-slider {
-      width:30%;
-      display: block;
-    }
+  #slider-fit {
+    padding: 0;
+  }
+
+  #values-slider {
+    width: 100%;
+    display: block;
+    height: 10px;
+  }
+
+  .noUi-connect {
+    background: #3383d4;
+  }
+
+  #values-slider .noUi-handle {
+    height: 18px;
+    width: 18px;
+    top: -5px;
+    right: -9px;
+    /* half the width */
+    border-radius: 9px;
+  }
+
+  .grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    grid-auto-rows: 1fr;
+    gap: 10px;
+    align-content: start;
+    padding: 10px;
+  }
+
+  .grid img {
+    display: block;
+    margin: auto;
+    width: 100%;
+    height: 100%;
+  }
+
+  .map-and-gallery-container {
+    display: flex;
+    flex-wrap: wrap;
+    width: 100%;
+    height: 80%;
+    margin: 25px 25px 25px 25px;
+  }
+
+  /* body {
+  background-color: #f5f2f3f8;
+} */
+
+  .map {
+    padding: 10px;
+    width: 66%;
+    height: 100%;
+  }
+
+  #map {
+    width: 100%;
+    height: 100%;
+
+  }
+
+  #gallery {
+    width: 34%;
+    height: 100%;
+    display: flex;
+  }
+
+  .nav-link {
+    color: white;
+  }
+
+  .btn-secondary {
+    /* background: #936969; 93a8ae 588A97*/
+    background: #3AB1CF;
+  }
   </style>
 
 {% endblock %}
 
 {% block body %}
-<h1>Welcome to SF PhotoMap!</h1>
+
+<nav class="navbar navbar-expand-lg bg-body-tertiary" style="background-color: #93a8ae">
+  <div class="container-fluid">
+    <a class="navbar-brand" href="/" style ="color: #ffffff;">SF PhotoMap</a>
+    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavAltMarkup"
+      aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
+      <div class="navbar-nav">
+        <a class="nav-link" href="/" style="color: #ffffff;">Home</a>
+        <a class="nav-link active" aria-current="page" href="/map">Map 1</a>
+        <a class="nav-link" href="/map-neighbourhoods">Map 2</a>
+        <a class="nav-link" href="/map-data-visualization">Map 3</a>
+      </div>
+    </div>
+
+  </div>
+</nav>
+
+<section class="py-5 text-center container"
+  style="background-color: #fffffff8; padding: 20px; margin: 0px 400px 0px 400px">
+  <!-- <div class="row py-lg-5"> -->
+  <div class="col-lg-6 col-md-8 mx-auto">
+    <h1 class="fw-light">San Francisco's Dynamic Cityscape</h1>
+    <p class="lead text-body-secondary">Explore the Map to See Activity Centers and Photo Locations Change Throughout the Day</p>
+    <p>
+    <div class="btn-group" role="group" aria-label="Basic example">
+      <button type="button" class="btn btn-secondary my-2" id="button-morning">Morning</button>
+      <button type="button" class="btn btn-secondary my-2" id="button-afternoon">Afternoon</button>
+      <button type="button" class="btn btn-secondary my-2" id="button-evening">Evening</button>
+      <button type="button" class="btn btn-secondary my-2" id="button-night">Night</button>
+      <button type="button" class="btn btn-secondary my-2"" id="button-animation">start</button>
+    </div>
+    </p>
+    <br>
+    <br>
+
+  </div>
+  <!-- </div> -->
+  <div class="overflow-hidden" style="max-height: 30vh;">
+    <div class="container px-5">
+      <div class="slider-styled" id="values-slider"></div>
+    </div>
+  </div>
+</section>
+
+<!-- <h1>Welcome to SF PhotoMap!</h1>
 <nav>
   <br>
   <br>
@@ -41,7 +155,7 @@
     <button type="button" class="btn btn-secondary" id="button-animation">start</button>
   </div>
 
-</nav>
+</nav> -->
 
   <section class="map">
     <br>

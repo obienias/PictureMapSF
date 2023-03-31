@@ -51,10 +51,42 @@
 {% endblock %}
 
 {% block body %}
-<h1>Explore neighbourhoods of SF</h1>
-<nav>
-  <div id="neighbourhood_list"></div>
+<nav class="navbar navbar-expand-lg bg-body-tertiary" style="background-color: #93a8ae">
+  <div class="container-fluid">
+    <a class="navbar-brand" href="/" style ="color: #ffffff;">SF PhotoMap</a>
+    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavAltMarkup"
+      aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
+      <div class="navbar-nav">
+        <a class="nav-link" href="/" style="color: #ffffff;">Home</a>
+        <a class="nav-link active" aria-current="page" href="/map">Map 1</a>
+        <a class="nav-link" href="/map-neighbourhoods">Map 2</a>
+        <a class="nav-link" href="/map-data-visualization">Map 3</a>
+      </div>
+    </div>
+
+  </div>
 </nav>
+<section class="py-5 text-center container"
+  style="background-color: #fffffff8; padding: 20px; margin: 0px 400px 0px 400px">
+  <!-- <div class="row py-lg-5"> -->
+  <div class="col-lg-6 col-md-8 mx-auto">
+    <h1 class="fw-light">Explore San Francisco neighbourhoods</h1>
+    <p class="lead text-body-secondary">Select neighbourhoods to see discover photos.</p>
+    <p>
+    </p>
+
+
+  </div>
+  <!-- </div> -->
+
+</section>
+
+
+  <div id="neighbourhood_list"></div>
+
 
 <div class="map-and-gallery-container">
   <section class="map">

@@ -47,18 +47,36 @@ var format = {
   }
 };
 
+function filterPips(value, type) {
+  if (type === 0) {
+    return value < 2000 ? -1 : 0;
+  }
+  if (value % 2 === 0) {
+    return 1; // large pip
+  }
+  return 0; // small pip
+}
+
 noUiSlider.create(valuesSlider, {
   start: ['1 AM', '11 PM'],
   range: { min: 0, max: valuesForSlider.length - 1 },
   // steps of 1
   step: 1,
-  tooltips: true,
+  tooltips: false,
+  connect: true,
   // format: format,
   pips: {
     mode: 'steps',
     format: format,
-    density: 50,
-
+    filter: filterPips,
+    // density: 50,
+    // values:4
+    classes: {
+      // class for small pip
+      '0': 'noUi-small-pip',
+      // class for large pip
+      '1': 'noUi-large-pip'
+    }
   },
 });
 
@@ -176,11 +194,22 @@ function displayMarkers() {
   if (MarkerClusters) {
     MarkerClusters.clearMarkers();
   }
-
+  mapBounds = mapPhoto.getBounds();
   //loops over filtered_photos and create markers, information for info-window 
   filtered_photos = get_photo_by_hour(start_hour, finish_hour, photos_info);
-  // console.log(filtered_photos);
+  //
+  photosByBounds = []
   for (const photo of filtered_photos) {
+    let photoLocation = {
+      lat: photo.latitude,
+      lng: photo.longitude,
+    }
+    if (mapBounds.contains(photoLocation)) {
+      photosByBounds.push(photo)
+    }
+  }
+  // console.log(filtered_photos);
+  for (const photo of photosByBounds) {
 
     // Define the content of the infoWindow
     const photoInfoContent = `
@@ -241,7 +270,8 @@ function displayMarkers() {
         //   },
         icon: {
           path: google.maps.SymbolPath.CIRCLE,
-          scale: (15 + (count / stats.clusters.markers.max) * 35),
+          // scale: (12 + (count / stats.clusters.markers.max) * 35),
+          scale: Math.min((12 + (count / (stats.clusters.markers.max * 0.8)) * 32), 45 ),
           fillColor: "#246F81",
           //246F81, 56d4ee, 04bceb, 244047, e57f84, 246F81, 6592A0
           fillOpacity: 0.5,
@@ -305,6 +335,10 @@ function initMap() {
 
       //listener for change bounds of map
       mapPhoto.addListener('idle', refreshGallery);
+      //
+      mapPhoto.addListener('idle', function () {
+        displayMarkers()
+      });
       // Query for all the time buttons
       // Add refreshGallery as a 'click' listener for all of them
       morning.addEventListener('click', refreshGallery);

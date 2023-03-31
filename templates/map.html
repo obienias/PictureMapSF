@@ -14,6 +14,7 @@
     width: 100%
   } */
 
+
   #slider-fit {
     padding: 0;
   }
@@ -25,8 +26,10 @@
   }
 
   .noUi-connect {
-    background: #3383d4;
+    background: #b5cce3;
   }
+
+  
 
   #values-slider .noUi-handle {
     height: 18px;
@@ -35,7 +38,33 @@
     right: -9px;
     /* half the width */
     border-radius: 9px;
+    /* background: #657483; */
   }
+
+  .noUi-small-pip {
+    font-size: 16px;
+  }
+
+  .noUi-large-pip {
+    font-size: 20px;
+  }
+  /* .nouislider-pips .noUi-value.large {
+  font-size: 16px;
+  font-weight: bold;
+}
+
+.nouislider-pips .noUi-value.small {
+  font-size: 12px;
+}
+
+.nouislider-pips .noUi-value.number {
+  margin-top: 10px;
+}
+
+.nouislider-pips .noUi-value.large.number {
+  margin-top: 5px;
+  font-size: 14px;
+} */
 
   .grid {
     display: grid;
@@ -99,17 +128,17 @@
 
 <nav class="navbar navbar-expand-lg bg-body-tertiary" style="background-color: #93a8ae">
   <div class="container-fluid">
-    <a class="navbar-brand" href="#">SF PhotoMap</a>
+    <a class="navbar-brand" href="/" style ="color: #ffffff;">PictureMapSF</a>
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavAltMarkup"
       aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
       <span class="navbar-toggler-icon"></span>
     </button>
     <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
       <div class="navbar-nav">
-        <a class="nav-link" href="#" style="color: #ffffff;">Home</a>
-        <a class="nav-link active" aria-current="page" href="#">Map 1</a>
-        <a class="nav-link" href="#">Map 2</a>
-        <a class="nav-link" href="#">Map 3</a>
+        <a class="nav-link" href="/" style="color: #ffffff;">Home</a>
+        <a class="nav-link active" aria-current="page" href="/map">Map 1</a>
+        <a class="nav-link" href="/map-neighbourhoods">Map 2</a>
+        <a class="nav-link" href="/map-data-visualization">Map 3</a>
       </div>
     </div>
 
@@ -118,11 +147,12 @@
 
 
 <section class="py-5 text-center container"
-  style="background-color: #fffffff8; padding: 20px; margin: 0px 400px 0px 400px">
+  style="max-width: 70%; background-color: #fffffff8; padding: 20px; margin: 0px 400px 0px 400px">
   <!-- <div class="row py-lg-5"> -->
   <div class="col-lg-6 col-md-8 mx-auto">
-    <h1 class="fw-light">Explore San Francisco through images</h1>
-    <p class="lead text-body-secondary">Zoom in and out through the map to see discover photos. Select time of day for photos you want to see.</p>
+    <h1 class="fw-light">Map Your Way Through San Francisco: <br> A Photo Journey</h1>
+    <p class="lead text-body-secondary">To explore the photo gallery for a specific area, simply zoom in and out on the map. You can also select individual markers to view photos taken at that location. 
+      Want to see photos taken during a specific time of day? No problem! Simply select the desired time and the gallery will update to display photos taken during that time period.</p>
     <p>
     <div class="btn-group" role="group" aria-label="Basic example">
       <button type="button" class="btn btn-secondary my-2" id="button-morning">Morning</button>
