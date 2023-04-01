@@ -6,10 +6,11 @@ let all_markers = [];
 let mapPhoto; 
 let photoInfo;
 let neighbourhoods_info;
-let polygonList = []
-let photosByNeighbourhood = []
-let filtered_photos
-let neighbourhoodInfo
+let polygonList = [];
+let photosByNeighbourhood = [];
+let filtered_photos;
+let filtered_photos2;
+let neighbourhoodInfo;
 const sfCoords = {
   lat: 37.773972,
   lng: -122.431297,
@@ -25,6 +26,7 @@ let photoCount;
 let photoList;
 let hoursList;
 let deckOverlay = null;
+let deckOverlay2 = null;
 
 const ScatterplotLayer = deck.ScatterplotLayer;
 const GeoJsonLayer = deck.GeoJsonLayer;
@@ -114,11 +116,10 @@ let night = document.getElementById('button-night')
 
 handleValuesSliderClick(night,'20', '24');
 
-function animateTimePeriods() {
+function animateTimePeriods1() {
   console.log("animation clicked");
 
   setTimeout(function() {
-    valuesSlider.noUiSlider.set(['5', '13'])
     start_hour = '5';
     finish_hour = '13';
     console.log(start_hour, finish_hour);
@@ -126,7 +127,7 @@ function animateTimePeriods() {
   }, 0);
 
   setTimeout(function() {
-    valuesSlider.noUiSlider.set(['13', '16'])
+    
     start_hour = '13';
     finish_hour = '16';
     console.log(start_hour, finish_hour);
@@ -134,7 +135,7 @@ function animateTimePeriods() {
   }, 2000);
 
   setTimeout(function() {
-    valuesSlider.noUiSlider.set(['16', '20'])
+    
     start_hour = '16';
     finish_hour = '20';
     console.log(start_hour, finish_hour);
@@ -142,17 +143,56 @@ function animateTimePeriods() {
   }, 4000);
 
   setTimeout(function() {
-    valuesSlider.noUiSlider.set(['20', '24'])
     start_hour = '20';
     finish_hour = '24';
     console.log(start_hour, finish_hour);
     renderData();
   }, 6000);
-
 }
 
+function animateTimePeriods2() {
+  console.log("animation2 clicked");
+
+  setTimeout(function() {
+    start_hour = '5';
+    finish_hour = '13';
+    console.log(start_hour, finish_hour);
+    renderData2();
+  }, 0);
+
+  setTimeout(function() {
+    start_hour = '13';
+    finish_hour = '16';
+    console.log(start_hour, finish_hour);
+    renderData2();
+  }, 2000);
+
+  setTimeout(function() {
+    start_hour = '16';
+    finish_hour = '20';
+    console.log(start_hour, finish_hour);
+    renderData2()
+  }, 4000);
+
+  setTimeout(function() {9
+    start_hour = '20';
+    finish_hour = '24';
+    console.log(start_hour, finish_hour);
+    renderData2();
+  }, 6000);
+}
+
+function startAnim() {
+  animateTimePeriods1(); // start the first animation
+
+  setTimeout(function() {
+    animateTimePeriods2(); // start the second animation after 2000ms
+  }, 700);
+}
+
+
 let animation = document.getElementById('button-animation')
-animation.addEventListener('click', animateTimePeriods);
+animation.addEventListener('click', startAnim);
 
 
 // Filter the photos based on the time of day
@@ -170,7 +210,45 @@ function get_photo_by_hour(start, end, photos_info) {
   return filtered_photos
 }
 
+function renderData2() {
+  if (deckOverlay2){
+    deckOverlay2.setMap(null)};
+  filtered_photos2 = get_photo_by_hour(start_hour, finish_hour, photos_info);
+  console.log(filtered_photos2)
+  deckOverlay2 = new GoogleMapsOverlay({
+    layers: [
+      new ScatterplotLayer({
+        id: "photos",
+        data: filtered_photos2,
+        // data: [{rad: 1000, longitude:-122.431297 ,latitude: 37.773972}],
+        pickable: true,
+        opacity: 0.3,
+        stroked: true,
+        filled: true,
+        pointRadiusScale: 6,
+        pickable: true,
+        // radiusMinPixels: 1,
+        // radiusMaxPixels: 100,
+        // lineWidthMinPixels: 1,
+        getPosition: d => [d.longitude, d.latitude],
+        getRadius: 45,
 
+        getFillColor:  d => {
+          if (d.hour_taken < 16) {
+            return [255, 0, 128]; // Pink color
+          } else {
+            return [0, 128, 255]; // Blue color
+          }
+        },
+
+        getLineColor: d => [0, 0, 0],
+
+      }),
+    ],
+  });
+
+    deckOverlay2.setMap(mapPhoto);
+}
 
 
 function renderData() {
@@ -261,7 +339,6 @@ function renderData() {
     //   }
     // };
     deckOverlay.setMap(mapPhoto);
-    // deckOverlay.setProps(props)
 }
 
 

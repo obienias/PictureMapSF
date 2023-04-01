@@ -30,7 +30,9 @@
     background: #b5cce3;
   }
 
-  
+  h5 {
+  font-size: 26px
+}
 
   #values-slider .noUi-handle {
     height: 18px;
@@ -112,7 +114,7 @@
   }
 
   #gallery {
-    width: 28%;
+    width: 30%;
     height: 100%;
     display: flex;
   }
@@ -134,6 +136,21 @@
   .progress{
     padding: 20 px;
   }
+
+  .btn-group {
+  width: 60%;
+}
+
+
+.btn {
+  font-size: 18px;
+  /* padding: 10px 10px; */
+  width: 25%;
+}
+
+.red-text {
+			color: #bd3f16;
+		}
 
 
 </style>
@@ -166,12 +183,12 @@
   style="max-width: 70%; background-color: #fffffff8; padding: 20px; margin: 0px 400px 0px 400px">
   <!-- <div class="row py-lg-5"> -->
   <div class="col-lg-6 col-md-8 mx-auto">
-    <h1 class="fw-light">Map Your Way Through San Francisco: <br> A Photo Journey</h1>
-    <p class="lead text-body-secondary">To explore the photo gallery for a specific area, simply zoom in and out on the map. You can also select individual markers to view photos taken at that location. <br> 
+    <h1 class="display-2" style= "font-size: 45px;"">Map Your Way Through San Francisco: <br> <span class="red-text"> A Photo Journey</span></h1>
+    <p class="lead text-body-secondary" style="max-width: 100%; margin: 0 auto; font-size: 24px; text-align: center;">To explore the photo gallery for a specific area, simply zoom in and out on the map. You can also select individual markers to view photos taken at that location. <br> 
       Want to see photos taken during a specific time of day? No problem! Simply select the desired time and the gallery will update to display photos taken during that time period.</p>
     <p>
-    <div class="btn-group" role="group" aria-label="Basic example">
-      <button type="button" class="btn btn-secondary my-2" id="button-morning">Morning</button>
+    <div class="btn-group btn-group-lg" role="group" aria-label="Large button group">
+      <button type="button" class="btn btn-secondary my-2" id="button-morning" style="--bs-btn-font-size: .75rem;">Morning</button>
       <button type="button" class="btn btn-secondary my-2" id="button-afternoon">Afternoon</button>
       <button type="button" class="btn btn-secondary my-2" id="button-evening">Evening</button>
       <button type="button" class="btn btn-secondary my-2" id="button-night">Night</button>

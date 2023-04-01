@@ -27,6 +27,7 @@ let ratioList = [];
 let photoCount;
 let photoList;
 let squarePhotoUrl;
+let popularNeighbourhoodNames;
 
 
 //calculate ration of neighbourhood area to photo count
@@ -178,11 +179,143 @@ function initMap() {
           neighbourhoodRatios.sort((a, b) => b.ratio - a.ratio);
 
           // Create a list of the 8 most popular neighbourhood names
-          const popularNeighbourhoodNames = neighbourhoodRatios.slice(0, 8).map(neighbourhood => neighbourhood.name);
+          popularNeighbourhoodNames = neighbourhoodRatios.slice(0, 8).map(neighbourhood => neighbourhood.name);
 
           // Update the HTML element with the list of popular neighbourhood names
-          const neighbourhoodListElement = document.querySelector('#neighbourhood_list');
-          neighbourhoodListElement.innerHTML = `<ul><li>${popularNeighbourhoodNames.join('</li><li>')}</li></ul>`;
+          // const neighbourhoodListElement = document.querySelector('#neighbourhood_list');
+          // neighbourhoodListElement.innerHTML = `<ul><li>${popularNeighbourhoodNames.join('</li><li>')}</li></ul>`;
+
+          // for (const item of neighbourhoods_info) {
+          //   if (popularNeighbourhoodNames.includes(item.name)) {
+          //     let coords = JSON.parse(item.coordinates);
+          //     const neighbourhoodListElement = document.querySelector('#neighbourhood_list');
+          //     // neighbourhoodListElement.innerHTML = `<ul><li>${popularNeighbourhoodNames.join('</li><li>')}</li></ul>`;
+
+          //     let neighbourhoodListElement2.innerHTML = `<li>${popularNeighbourhoodNames}</li>`
+
+          //     const newPolygon = new google.maps.Polygon({
+          //       title: item.name,
+          //       paths: coords,
+          //       strokeColor: "#FFFFFF",
+          //       strokeOpacity: 0.5,
+          //       strokeWeight: 1,
+          //       fillColor: "#246F81",
+          //       fillOpacity: 0.01,
+          //     });
+
+          //     //"##c9c9c9"
+
+          //     //creates instance of neighbourhood on map
+          //     newPolygon.setMap(mapPhoto);
+
+          //     //appends polygon to list
+          //     polygonList.push(newPolygon);
+
+          //     //defines content for neighbourhood info-window
+          //     let neighbourhoodInfoContent = `
+          //       <div class="window-content">
+
+          //         <ul class="neighbourhood-info">
+          //           <li><b>Neighbourhood name: </b>${item.name}</li>
+          //           <br>
+          //           <li><b>Link: </b>${item.url}</li>
+          //           <br>
+          //           <button onclick="openLightboxGallery()">View Photos</button>
+          //         </ul>
+          //       </div>`
+
+          //     let PolyCenter = newPolygon.getBoundingBox().getCenter();
+
+          //     const centerMarker = new google.maps.Marker({
+          //       position: PolyCenter,
+          //       visible: false,
+          //       map: mapPhoto,
+          //     })
+
+          //     google.maps.event.addListener(neighbourhoodListElement, 'click', () => {
+          //       neighbourhoodInfo.setContent(neighbourhoodInfoContent);
+          //       neighbourhoodInfo.open(mapPhoto, centerMarker);
+          //       console.log(item.name)
+          //       let photos = filterPhotoNeighbourhood(photos_info, photosByNeighbourhood, newPolygon);
+
+          //       photoList = photos;
+
+          //       const randomImages = getRandomPhotos(18);
+          //       const galleryHTML = generateGalleryHTML(randomImages);
+          //       document.querySelector("#gallery").innerHTML = galleryHTML;
+
+
+          //     });
+          //   }
+          // }
+
+
+      //     for (const item of neighbourhoods_info) {
+      //       if (popularNeighbourhoodNames.includes(item.name)) {
+      //         let coords = JSON.parse(item.coordinates);
+
+      //         const newPolygon = new google.maps.Polygon({
+      //           title: item.name,
+      //           paths: coords,
+      //           strokeColor: "#FFFFFF",
+      //           strokeOpacity: 0.5,
+      //           strokeWeight: 1,
+      //           fillColor: "#246F81",
+      //           fillOpacity: 0.01,
+      //         });
+
+      //         //creates instance of neighbourhood on map
+      //         newPolygon.setMap(mapPhoto);
+
+      //         //appends polygon to list
+      //         polygonList.push(newPolygon);
+
+      //         //defines content for neighbourhood info-window
+      //         let neighbourhoodInfoContent = `
+      // <div class="window-content">
+      //   <ul class="neighbourhood-info">
+      //     <li><b>Neighbourhood name: </b>${item.name}</li>
+      //     <br>
+      //     <li><b>Link: </b>${item.url}</li>
+      //     <br>
+      //     <button class="view-photos-button">View Photos</button>
+      //   </ul>
+      // </div>`;
+
+      //         let PolyCenter = newPolygon.getBoundingBox().getCenter();
+
+      //         const centerMarker = new google.maps.Marker({
+      //           position: PolyCenter,
+      //           visible: false,
+      //           map: mapPhoto,
+      //         });
+
+      //         // Store the neighbourhood info content in a data attribute on the button
+      //         const viewPhotosButton = neighbourhoodListElement.querySelector('.view-photos-button');
+      //         // viewPhotosButton.dataset.neighbourhoodInfoContent = neighbourhoodInfoContent;
+
+      //         // Attach event listener to the parent element
+      //         neighbourhoodListElement.addEventListener('click', (event) => {
+      //           // Check if the clicked element is a button with the "view-photos-button" class
+      //           if (event.target.classList.contains('view-photos-button')) {
+      //             // const neighbourhoodInfoContent = event.target.dataset.neighbourhoodInfoContent;
+      //             neighbourhoodInfo.setContent(neighbourhoodInfoContent);
+      //             neighbourhoodInfo.open(mapPhoto, centerMarker);
+      //             const polygon = polygonList.find(p => p.title === item.name);
+      //             let photos = filterPhotoNeighbourhood(photos_info, photosByNeighbourhood, polygon);
+      //             photoList = photos;
+      //             const randomImages = getRandomPhotos(18);
+      //             const galleryHTML = generateGalleryHTML(randomImages);
+      //             document.querySelector("#gallery").innerHTML = galleryHTML;
+      //           }
+      //         });
+
+      //       }
+      //     }
+
+
+
+
 
           // neighbourhoodListElement.querySelectorAll('li').forEach((listItem) => {
           //   // get the name of the neighbourhood from the list item
@@ -295,6 +428,8 @@ function initMap() {
               const galleryHTML = generateGalleryHTML(randomImages);
               document.querySelector("#gallery").innerHTML = galleryHTML;
 
+
+
               // let numPhotos = 20; // specify the number of photos to display
               // let randomPhotos = getRandomPhotos(numPhotos);
               // displayLightboxGallery(randomPhotos);
@@ -315,9 +450,40 @@ function initMap() {
 
           }
 
+          console.log(polygonList);
+
+          const neighbourhoodListElement = document.querySelector('#neighbourhood_list');
+          //neighbourhoodListElement.innerHTML = `<ul>${popularNeighbourhoodNames.map(name => `<li class="view-photos-button">${name}</li>`).join('')}</ul>`;
+          neighbourhoodListElement.innerHTML = `<div class="btn-group" role="group" aria-label="Neighborhoods">${popularNeighbourhoodNames.map(name => `<button type="button" class="btn btn-secondary view-photos-button">${name}</button>`).join('')}</div>`;
+
+
+
+          neighbourhoodListElement.addEventListener('click', (event) => {
+            // Check if the clicked element is a button with the "view-photos-button" class
+            if (event.target.classList.contains('view-photos-button')) {
+              const neighbourhoodInfoContent = "testtest";
+              // const viewPhotosButton = neighbourhoodListElement.querySelector('li.view-photos-button');
+              // const neighbourhoodName = viewPhotosButton.innerHTML;
+              const neighbourhoodName = event.target.innerHTML;
+              console.log(neighbourhoodName);
+              //const neighbourhoodName = event.target.parentNode.querySelector('li:first-child').textContent.split(':')[1].trim();
+              const polygon = polygonList.find(p => p.title === neighbourhoodName);
+              let photos = filterPhotoNeighbourhood(photos_info, photosByNeighbourhood, polygon);
+              photoList = photos;
+              const randomImages = getRandomPhotos(18);
+              const galleryHTML = generateGalleryHTML(randomImages);
+              document.querySelector("#gallery").innerHTML = galleryHTML;
+              neighbourhoodInfo.setContent(neighbourhoodInfoContent);
+              const PolyCenter = polygon.getBoundingBox().getCenter();
+              neighbourhoodInfo.open(mapPhoto, new google.maps.Marker({
+                position: PolyCenter,
+                visible: false,
+                map: mapPhoto,
+              }));
+            }
+          });
+
         });
-
-
     });
 
   mapPhoto = new google.maps.Map(document.querySelector('#map'), {
