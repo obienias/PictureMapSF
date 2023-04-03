@@ -209,6 +209,7 @@ function initMap() {
             let neighbourhoodInfoContent = 
             `<div class="neighbourhood-info">
               <h2>${item.name}</h2>
+              <button onclick="openLightboxGallery()">View Photos</button>
               <a href="${item.url}" target="_blank">Learn more</a>
             </div>
           `;
@@ -280,6 +281,7 @@ function initMap() {
 
               const neighbourhoodInfoContent = `<div class="neighbourhood-info">
               <h2>${neighbourhoodName}</h2>
+              <button onclick="openLightboxGallery()">View Photos</button>
               <a href="${neighbourhoodUrl}" target="_blank">Learn more</a>
             </div>
           `
