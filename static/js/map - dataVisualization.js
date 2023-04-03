@@ -80,7 +80,7 @@ noUiSlider.create(valuesSlider, {
   },
 });
 
-// The display values can be used to control the slider
+//  control the slider
 valuesSlider.noUiSlider.set(['1', '24']);
 
 valuesSlider.addEventListener('click', function () {
@@ -120,14 +120,15 @@ function animateTimePeriods1() {
   console.log("animation clicked");
 
   setTimeout(function() {
-    start_hour = '5';
+    valuesSlider.noUiSlider.set(['5', '13']);
+    start_hour = '4';
     finish_hour = '13';
     console.log(start_hour, finish_hour);
     renderData();
   }, 0);
 
   setTimeout(function() {
-    
+    valuesSlider.noUiSlider.set(['13', '16']);
     start_hour = '13';
     finish_hour = '16';
     console.log(start_hour, finish_hour);
@@ -135,7 +136,7 @@ function animateTimePeriods1() {
   }, 2000);
 
   setTimeout(function() {
-    
+    valuesSlider.noUiSlider.set(['16', '20']);
     start_hour = '16';
     finish_hour = '20';
     console.log(start_hour, finish_hour);
@@ -143,7 +144,8 @@ function animateTimePeriods1() {
   }, 4000);
 
   setTimeout(function() {
-    start_hour = '20';
+    valuesSlider.noUiSlider.set(['20', '24']);
+    start_hour = '19';
     finish_hour = '24';
     console.log(start_hour, finish_hour);
     renderData();
@@ -175,7 +177,7 @@ function animateTimePeriods2() {
   }, 4000);
 
   setTimeout(function() {9
-    start_hour = '20';
+    start_hour = '19';
     finish_hour = '24';
     console.log(start_hour, finish_hour);
     renderData2();
@@ -233,11 +235,22 @@ function renderData2() {
         getPosition: d => [d.longitude, d.latitude],
         getRadius: 45,
 
+        // getFillColor:  d => {
+        //   if (d.hour_taken < 16) {
+        //     return [255, 0, 128]; // Pink color
+        //   } else {
+        //     return [0, 128, 255]; // Blue color
+        //   }
+        // },
         getFillColor:  d => {
-          if (d.hour_taken < 16) {
-            return [255, 0, 128]; // Pink color
+          if (d.hour_taken < 13) {
+            return [133, 201, 221]; // Pink color
+          } else if (d.hour_taken < 16) {
+            return [102, 170, 189]; // Blue color
+          } else if (d.hour_taken < 20) {
+            return [70, 140, 159]; // Blue color
           } else {
-            return [0, 128, 255]; // Blue color
+            return [29, 89, 105]; // Blue color
           }
         },
 
@@ -281,13 +294,13 @@ function renderData() {
         //   } else {
         //     return [0,63,92]; // Blue color
         //   }},
-        getFillColor:  d => {
-          if (d.hour_taken < 16) {
-            return [255, 0, 128]; // Pink color
-          } else {
-            return [0, 128, 255]; // Blue color
-          }
-        },
+        // getFillColor:  d => {
+        //   if (d.hour_taken < 16) {
+        //     return [255, 0, 128]; // Pink color
+        //   } else {
+        //     return [0, 128, 255]; // Blue color
+        //   }
+        // },
         // getFillColor:  d => {
         //   if (d.hour_taken < 13) {
         //     return [255, 255, 0]; // Pink color
@@ -299,7 +312,7 @@ function renderData() {
         //     return [0, 0, 255]; // Blue color
         //   }
         // },
-
+        //not good together
         // getFillColor:  d => {
         //   if (d.hour_taken < 13) {
         //     return [255, 166, 0]; // Pink color
@@ -310,6 +323,43 @@ function renderData() {
         //   } else {
         //     return [0,63,92]; // Blue color
         //   }
+        // },
+        //too blue...
+        // getFillColor:  d => {
+        //   if (d.hour_taken < 13) {
+        //     return [58, 177, 207]; // Pink color
+        //   } else if (d.hour_taken < 16) {
+        //     return [40, 122, 143]; // Blue color
+        //   } else if (d.hour_taken < 20) {
+        //     return [36, 111, 129]; // Blue color
+        //   } else {
+        //     return [29, 89, 105]; // Blue color
+        //   }
+        // },
+
+        //blue...
+        getFillColor:  d => {
+          if (d.hour_taken < 13) {
+            return [133, 201, 221]; // Pink color
+          } else if (d.hour_taken < 16) {
+            return [102, 170, 189]; // Blue color
+          } else if (d.hour_taken < 20) {
+            return [70, 140, 159]; // Blue color
+          } else {
+            return [29, 89, 105]; // Blue color
+          }
+        },
+        // getFillColor:  d => {
+        //   if (d.hour_taken < 13) {
+        //     return [195, 109, 144]; // Pink color
+        //   } else if (d.hour_taken < 16) {
+        //     return [128, 114, 169]; // Blue color
+        //   } else if (d.hour_taken < 20) {
+        //     return [88, 116, 165]; // Blue color
+        //   } else {
+        //     return [29, 89, 105]; // Blue color
+        //   }
+        // },
         // getFillColor:d => [36, 111, 129],
         getLineColor: d => [0, 0, 0],
 
