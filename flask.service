@@ -13,4 +13,4 @@ ExecStart=/bin/bash -c "source env/bin/activate\
 Restart=always
 
 [Install]
-WantedBy=multi-user.targe
+WantedBy=multi-user.target
