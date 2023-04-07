@@ -4,7 +4,7 @@ The app provides an interactive way to explore San Francisco through 24,000 geol
 
 
 # Tech Stack
-Python, Postgresql, Flask, SqlAlchemy, JavaScript,  Jinja, html, css, Bootstrap, Ajax, MarkerClusterer, Shapely
+Python, Postgresql, Flask, SqlAlchemy, JavaScript,  Jinja, html, css, Bootstrap, Ajax, deck.gl, MarkerClusterer, Shapely
 
 # APIs
 Google Maps API, Flickr API
